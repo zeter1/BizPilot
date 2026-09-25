@@ -80,6 +80,9 @@ jobs:
           print("Local HTML asset references are valid:", ", ".join(sorted(parser.refs)))
           PY
 
+      - name: Cash-flow regression tests
+        run: node scripts/test-cashflow.mjs
+
       - name: Browser boot smoke
         run: bash scripts/browser-smoke.sh
 

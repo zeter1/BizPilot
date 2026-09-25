@@ -688,6 +688,61 @@
     return /^\d{4}-\d{2}-\d{2}$/.test(value) ? value : '';
   }
 
+  const cashflowEngine = globalThis.BizPilotCashflow;
+  if (!cashflowEngine) throw new Error('BizPilot cash-flow engine is not loaded');
+  const daysBetweenIso = cashflowEngine.daysBetweenIso;
+  const paymentTimingLabel = item => cashflowEngine.paymentTimingLabel(item, todayIso());
+
+  function outstandingInvoices() {
+    return cashflowEngine.outstandingInvoices(data.invoices);
+  }
+
+  function cashflowForecast(horizonDays) {
+    return cashflowEngine.cashflowForecast({
+      today: todayIso(),
+      horizonDays,
+      startBalance: Number(data.business?.cashBalance || 0),
+      invoices: data.invoices,
+      plannedPayments: data.plannedPayments || []
+    });
+  }
+
+  function receivablesAging() {
+    return cashflowEngine.receivablesAging(data.invoices, todayIso());
+  }
+
+  function renderCashflowChart(forecast) {
+    const svg = $('#cashflowChart');
+    if (!svg) return;
+    const points = Array.isArray(forecast?.points) ? forecast.points : [];
+    if (!points.length) { svg.innerHTML = ''; return; }
+
+    const width = 720, height = 280, left = 72, right = 20, top = 18, bottom = 42;
+    const plotW = width - left - right, plotH = height - top - bottom;
+    const values = points.map(point => Number(point.balance || 0));
+    let min = Math.min(0, ...values), max = Math.max(0, ...values);
+    if (max === min) { max += 1; min -= 1; }
+    const span = max - min;
+    const x = index => left + (points.length === 1 ? 0 : index / (points.length - 1) * plotW);
+    const y = value => top + (max - value) / span * plotH;
+    const line = points.map((point,index) => `${index ? 'L' : 'M'} ${x(index).toFixed(2)} ${y(point.balance).toFixed(2)}`).join(' ');
+    const baseY = Math.min(top + plotH, Math.max(top, y(0)));
+    const area = `${line} L ${x(points.length-1).toFixed(2)} ${baseY.toFixed(2)} L ${x(0).toFixed(2)} ${baseY.toFixed(2)} Z`;
+
+    const grid = Array.from({length:5}, (_,index) => {
+      const ratio = index / 4;
+      const value = max - span * ratio;
+      const yy = top + plotH * ratio;
+      return `<line class="grid-line" x1="${left}" x2="${width-right}" y1="${yy.toFixed(2)}" y2="${yy.toFixed(2)}"></line><text class="axis-text" x="${left-8}" y="${(yy+4).toFixed(2)}" text-anchor="end">${esc(formatMoney(value))}</text>`;
+    }).join('');
+
+    const tickIndexes = [...new Set([0, Math.round((points.length-1)/2), points.length-1])];
+    const ticks = tickIndexes.map(index => `<text class="axis-text" x="${x(index).toFixed(2)}" y="${height-14}" text-anchor="${index===0?'start':index===points.length-1?'end':'middle'}">${esc(toRuDate(points[index].date).slice(0,5))}</text>`).join('');
+    const zeroLine = min < 0 && max > 0 ? `<line class="zero-line" x1="${left}" x2="${width-right}" y1="${y(0).toFixed(2)}" y2="${y(0).toFixed(2)}"></line>` : '';
+
+    svg.innerHTML = `<defs><linearGradient id="cashflowArea" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="currentColor" stop-opacity=".24"></stop><stop offset="100%" stop-color="currentColor" stop-opacity=".03"></stop></linearGradient></defs>${grid}${zeroLine}<path class="cashflow-area" d="${area}"></path><path class="cashflow-line" d="${line}"></path>${ticks}`;
+  }
+
   function getBusinessPriorities() {
     const today = todayIso();
     const priorities = [];

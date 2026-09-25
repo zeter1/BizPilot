@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-09-25 — Cash-flow runtime recovery
+
+### Исправлено
+
+- Найдена реальная startup-регрессия через новый headless browser smoke: dashboard падал на `cashflowForecast is not defined`.
+- Восстановлен полный cash-flow helper layer: прогноз остатка, неоплаченные счета, aging дебиторки, timing плановых платежей, date arithmetic и SVG chart rendering.
+- Просроченные счета без актуальной ожидаемой даты оплаты сознательно исключаются из прогнозируемых поступлений.
+- Добавлен `scripts/test-cashflow.mjs` с regression tests для forecast math, cash-gap detection и receivables aging.
+- `js/cashflow.js` вынесен как тестируемый browser/Node module.
+
+
 ## 2026-09-25 — Browser smoke verification
 
 ### Изменено
