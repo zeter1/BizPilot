@@ -2925,4 +2925,5 @@
   if (safeSessionGet('bizpilot-demo-started-v2')) { safeSessionRemove('bizpilot-demo-started-v2'); toast('Учебный демо-режим запущен. Рабочие данные сохранены отдельно.'); }
   if (safeSessionGet('bizpilot-demo-ended-v2')) { safeSessionRemove('bizpilot-demo-ended-v2'); toast('Демо завершено. Рабочая область восстановлена.'); }
   if (safeSessionGet('bizpilot-import-notice-v1')) { safeSessionRemove('bizpilot-import-notice-v1'); toast('Все данные восстановлены из ZIP'); }
+  document.documentElement.dataset.bizpilotBoot='ready';
 })();

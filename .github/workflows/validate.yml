@@ -7,12 +7,14 @@ on:
       - "index.html"
       - "css/**"
       - "js/**"
+      - "scripts/**"
       - ".github/workflows/validate.yml"
   pull_request:
     paths:
       - "index.html"
       - "css/**"
       - "js/**"
+      - "scripts/**"
       - ".github/workflows/validate.yml"
   workflow_dispatch:
 
@@ -24,9 +26,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  static-validation:
+  validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 12
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -78,23 +80,8 @@ jobs:
           print("Local HTML asset references are valid:", ", ".join(sorted(parser.refs)))
           PY
 
-      - name: Static server smoke
-        shell: bash
-        run: |
-          python3 -m http.server 8000 > /tmp/bizpilot-http.log 2>&1 &
-          server_pid=$!
-          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
-
-          for attempt in {1..20}; do
-            if curl -fsS http://127.0.0.1:8000/ >/dev/null; then
-              break
-            fi
-            sleep 0.25
-          done
-
-          curl -fsS http://127.0.0.1:8000/ >/dev/null
-          curl -fsS http://127.0.0.1:8000/css/styles.css >/dev/null
-          curl -fsS http://127.0.0.1:8000/js/app.js >/dev/null
+      - name: Browser boot smoke
+        run: bash scripts/browser-smoke.sh
 
       - name: Diff hygiene
         run: git diff --check

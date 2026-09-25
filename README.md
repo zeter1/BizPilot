@@ -67,11 +67,13 @@ http://localhost:8000
 
 ```text
 BizPilot/
-├── index.html       # интерфейс и разметка приложения
+├── index.html              # интерфейс и разметка приложения
 ├── css/
-│   └── styles.css   # стили, адаптивность и темы
-└── js/
-    └── app.js       # состояние, бизнес-логика, хранение и UI-поведение
+│   └── styles.css          # стили, адаптивность и темы
+├── js/
+│   └── app.js              # состояние, бизнес-логика, хранение и UI-поведение
+└── scripts/
+    └── browser-smoke.sh    # headless Chrome startup verification
 ```
 
 Приложение намеренно собрано как статический frontend без сборщика и внешнего package manager.
@@ -88,7 +90,9 @@ BizPilot/
 
 - синтаксис `js/app.js` через `node --check`;
 - что локальные CSS/JS-ресурсы, на которые ссылается `index.html`, существуют;
-- что приложение и ключевые статические ресурсы отдаются локальным HTTP-сервером;
+- что локальные CSS/JS-ресурсы, на которые ссылается `index.html`, существуют;
+- настоящий headless Chrome boot через локальный HTTP-сервер до маркера `data-bizpilot-boot="ready"`;
+- наличие dashboard root после выполнения startup logic;
 - diff hygiene через `git diff --check`.
 
 Локальная быстрая проверка JavaScript:
@@ -97,7 +101,7 @@ BizPilot/
 node --check js/app.js
 ```
 
-После функциональных изменений дополнительно нужен browser runtime smoke test: создание/редактирование сущностей, переключение разделов, сохранение после reload, demo-mode, ZIP export/import. Полный browser E2E сейчас **NOT VERIFIED** автоматическим CI.
+Автоматический CI теперь доказывает, что приложение реально исполняет startup logic в headless Chrome и доходит до готового dashboard. Полный пользовательский E2E — создание/редактирование сущностей, persistence после reload, demo-mode и ZIP export/import — пока **NOT VERIFIED** автоматическим CI и остаётся отдельным уровнем проверки.
 
 ## Ограничения
 
