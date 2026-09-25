@@ -1,0 +1,1400 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101828">
+  <meta name="description" content="BizPilot — SaaS-сервис для малого бизнеса: продажи и сделки, клиенты, заказы, счета, финансы, денежный поток, блокноты, календарь, уведомления и бизнес-аналитика.">
+  <title>BizPilot — управление бизнесом в одном окне</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Основная навигация">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">B</div>
+        <div>
+          <strong>BizPilot</strong>
+          <span>Business workspace</span>
+        </div>
+      </div>
+
+      <nav class="nav-list" id="navList">
+        <button class="nav-item active" data-view="dashboard"><span class="nav-icon">⌂</span><span>Обзор</span></button>
+        <button class="nav-item" data-view="orders"><span class="nav-icon">▦</span><span>Заказы</span><span class="nav-badge" id="navOrdersBadge">0</span></button>
+        <button class="nav-item" data-view="clients"><span class="nav-icon">◎</span><span>Клиенты</span></button>
+        <button class="nav-item" data-view="sales"><span class="nav-icon">↗</span><span>Продажи</span><span class="nav-badge alert-badge" id="navSalesBadge" hidden>0</span></button>
+        <button class="nav-item" data-view="finance"><span class="nav-icon">₽</span><span>Финансы</span></button>
+        <button class="nav-item" data-view="cashflow"><span class="nav-icon">≈</span><span>Денежный поток</span><span class="nav-badge alert-badge" id="navCashflowBadge" hidden>0</span></button>
+        <button class="nav-item" data-view="invoices"><span class="nav-icon">▤</span><span>Счета</span></button>
+        <button class="nav-item" data-view="services"><span class="nav-icon">◇</span><span>Услуги</span></button>
+        <button class="nav-item" data-view="notes"><span class="nav-icon">▧</span><span>Блокноты</span><span class="nav-badge" id="navNotesBadge" hidden>0</span></button>
+        <button class="nav-item" data-view="analytics"><span class="nav-icon">↗</span><span>Аналитика</span></button>
+        <button class="nav-item" data-view="calendar"><span class="nav-icon">□</span><span>Календарь</span><span class="nav-badge calendar-badge alert-badge" id="navCalendarBadge" hidden>0</span></button>
+        <button class="nav-item" data-view="notifications"><span class="nav-icon bell-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Уведомления</span><span class="nav-badge alert-badge" id="navNotificationsBadge" hidden>0</span></button>
+        <button class="nav-item" data-view="calculations"><span class="nav-icon">∑</span><span>Подсчёты</span></button>
+        <button class="nav-item" data-view="learning"><span class="nav-icon">?</span><span>Обучение</span><span class="nav-badge demo-nav-badge" id="navLearningDemoBadge" hidden>ДЕМО</span></button>
+        <button class="nav-item" data-view="profile"><span class="nav-icon">◉</span><span>Ваши данные</span></button>
+        <button class="nav-item" data-view="settings"><span class="nav-icon">⚙</span><span>Настройки</span></button>
+      </nav>
+
+      <button class="sidebar-footer profile-trigger" id="profileButton" type="button" data-go="settings" aria-label="Открыть настройки профиля">
+        <div class="user-avatar" id="sidebarAvatar">ДК</div>
+        <div class="user-copy">
+          <strong id="sidebarProfileName">Дмитрий</strong>
+          <span id="sidebarProfileRole">Владелец</span>
+        </div>
+        <span class="profile-chevron" aria-hidden="true">›</span>
+      </button>
+
+      <button class="sidebar-version" id="sidebarVersionButton" type="button" data-go="updates" aria-label="Открыть историю обновлений BizPilot">
+        <span class="version-status-dot" aria-hidden="true"></span>
+        <span class="version-copy">Версия <strong data-app-version>17.0</strong></span>
+        <span class="version-link-copy">Что нового →</span>
+      </button>
+    </aside>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <main class="main-area">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="icon-btn mobile-only" id="menuBtn" aria-label="Открыть меню">☰</button>
+          <div>
+            <p class="breadcrumb">BizPilot / <span id="breadcrumbText">Обзор</span></p>
+            <h1 id="pageTitle">Обзор бизнеса</h1>
+          </div>
+        </div>
+
+        <div class="topbar-actions">
+          <label class="search-box" aria-label="Поиск">
+            <span>⌕</span>
+            <input id="globalSearch" type="search" placeholder="Поиск по бизнесу">
+            <kbd>⌘ K</kbd>
+          </label>
+          <button class="icon-btn" id="themeBtn" aria-label="Переключить тему">◐</button>
+          <button class="icon-btn notification-btn" id="notifyBtn" aria-label="Открыть центр уведомлений" title="Уведомления">
+            <svg class="bell-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span class="notification-count" id="topNotificationBadge" hidden>0</span>
+          </button>
+          <button class="btn btn-primary" id="quickAddBtn">+ Создать</button>
+        </div>
+      </header>
+
+      <div class="content-wrap">
+        <section class="view active" data-view-panel="dashboard">
+          <div class="hero-strip">
+            <div>
+              <span class="pill success" id="heroHealth">● Бизнес в норме</span>
+              <h2 id="heroGreeting">Добрый день, Дмитрий</h2>
+              <p>Собрали главное по компании на сегодня. У вас <strong id="heroNewOrders">0 новых заказов</strong> и <strong id="heroDueInvoices">0 счетов ждут оплату</strong>. В воронке — <strong id="heroActiveDeals">0 активных сделок</strong>.</p>
+            </div>
+            <div class="hero-actions">
+              <button class="btn btn-secondary" data-open-modal="deal">Новая сделка</button>
+              <button class="btn btn-secondary" data-open-modal="invoice">Выставить счёт</button>
+              <button class="btn btn-primary" data-open-modal="order">Новый заказ</button>
+            </div>
+          </div>
+
+          <div class="metrics-grid" id="metricsGrid"></div>
+
+          <div class="grid two-one">
+            <article class="card chart-card">
+              <div class="card-head">
+                <div>
+                  <span class="eyebrow">Динамика</span>
+                  <h3>Выручка и расходы</h3>
+                </div>
+                <select class="select compact" id="chartPeriod">
+                  <option value="6">6 месяцев</option>
+                  <option value="12">12 месяцев</option>
+                </select>
+              </div>
+              <div class="chart-legend"><span><i class="legend-dot revenue"></i>Выручка</span><span><i class="legend-dot expense"></i>Расходы</span></div>
+              <div class="chart-wrap"><svg id="revenueChart" viewBox="0 0 720 280" role="img" aria-label="График выручки и расходов"></svg></div>
+            </article>
+
+            <article class="card">
+              <div class="card-head">
+                <div>
+                  <span class="eyebrow">Приоритеты</span>
+                  <h3>Что требует внимания</h3>
+                </div>
+                <span class="pill neutral" id="focusCount">0 задач</span>
+              </div>
+              <div class="focus-list" id="focusList"></div>
+            </article>
+          </div>
+
+          <div class="grid equal">
+            <article class="card">
+              <div class="card-head">
+                <div><span class="eyebrow">Последние</span><h3>Заказы</h3></div>
+                <button class="text-btn" data-go="orders">Все заказы →</button>
+              </div>
+              <div class="table-wrap compact-table">
+                <table><thead><tr><th>Заказ</th><th>Клиент</th><th>Сумма</th><th>Статус</th></tr></thead><tbody id="dashboardOrders"></tbody></table>
+              </div>
+            </article>
+
+            <article class="card">
+              <div class="card-head">
+                <div><span class="eyebrow">К оплате</span><h3>Счета</h3></div>
+                <button class="text-btn" data-go="invoices">Все счета →</button>
+              </div>
+              <div id="invoiceMiniList" class="invoice-mini-list"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="view" data-view-panel="orders">
+          <div class="section-toolbar">
+            <div class="segmented" id="orderFilters">
+              <button class="active" data-filter="all">Все</button>
+              <button data-filter="new">Новые</button>
+              <button data-filter="work">В работе</button>
+              <button data-filter="done">Готовы</button>
+              <button data-filter="paid">Оплачены</button>
+            </div>
+            <button class="btn btn-primary" data-open-modal="order">+ Новый заказ</button>
+          </div>
+          <article class="card table-card">
+            <div class="table-tools">
+              <label class="inline-search"><span>⌕</span><input id="ordersSearch" placeholder="Найти заказ или клиента"></label>
+              <div class="table-summary" id="ordersSummary"></div>
+            </div>
+            <div class="table-wrap"><table><thead><tr><th>№</th><th>Клиент</th><th>Услуга</th><th>Срок</th><th>Сумма</th><th>Прибыль / маржа</th><th>Время</th><th>Статус</th><th></th></tr></thead><tbody id="ordersTable"></tbody></table></div>
+          </article>
+        </section>
+
+        <section class="view" data-view-panel="clients">
+          <div class="section-toolbar">
+            <div><p class="section-note">База клиентов и история взаимодействий</p></div>
+            <button class="btn btn-primary" data-open-modal="client">+ Добавить клиента</button>
+          </div>
+          <div class="client-layout">
+            <article class="card table-card">
+              <div class="table-tools"><label class="inline-search"><span>⌕</span><input id="clientsSearch" placeholder="Компания, контакт, реквизиты, телефон"></label><span class="pill neutral" id="clientsCount"></span></div>
+              <div class="table-wrap"><table><thead><tr><th>Клиент</th><th>Контакты</th><th>Заказов</th><th>Выручка</th><th>Последняя активность</th><th>Действия</th></tr></thead><tbody id="clientsTable"></tbody></table></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="view" data-view-panel="sales" id="salesPanel">
+          <div class="section-toolbar sales-toolbar">
+            <div>
+              <p class="section-note">Ведите потенциальные сделки до результата. У каждой активной сделки фиксируйте один следующий шаг и дату — BizPilot поднимет просроченный follow-up в приоритеты.</p>
+            </div>
+            <button class="btn btn-primary" data-open-modal="deal">+ Новая сделка</button>
+          </div>
+          <div class="metrics-grid mini sales-metrics" id="salesMetrics"></div>
+          <div id="salesHealth" class="sales-health-wrap"></div>
+          <article class="card pipeline-card">
+            <div class="card-head pipeline-card-head">
+              <div><span class="eyebrow">Воронка</span><h3>Активные сделки</h3></div>
+              <label class="inline-search sales-search"><span>⌕</span><input id="salesSearch" placeholder="Компания, контакт, следующий шаг"></label>
+            </div>
+            <div class="pipeline-board" id="pipelineBoard"></div>
+          </article>
+          <article class="card closed-deals-card">
+            <div class="card-head"><div><span class="eyebrow">История</span><h3>Закрытые сделки</h3></div><span class="pill neutral" id="salesClosedCount">0</span></div>
+            <div class="closed-deals-list" id="salesClosedList"></div>
+          </article>
+        </section>
+
+        <section class="view" data-view-panel="finance">
+          <div class="metrics-grid mini" id="financeMetrics"></div>
+          <div class="grid two-one">
+            <article class="card finance-card">
+              <div class="card-head"><div><span class="eyebrow">Денежный поток</span><h3>Операции</h3></div><button class="btn btn-secondary btn-small" data-open-modal="transaction">+ Операция</button></div>
+              <div class="finance-tools">
+                <label class="inline-search"><span>⌕</span><input id="financeSearch" placeholder="Название или категория"></label>
+                <div class="finance-tools-right">
+                  <div class="segmented compact-segmented" id="financeFilters"><button class="active" data-filter="all">Все</button><button data-filter="income">Доходы</button><button data-filter="expense">Расходы</button></div>
+                  <select id="financePeriod" class="mini-select" aria-label="Период операций"><option value="month">Этот месяц</option><option value="all">За всё время</option></select>
+                </div>
+              </div>
+              <div class="finance-summary" id="financeSummary"></div>
+              <div class="finance-list" id="financeList"></div>
+            </article>
+            <article class="card">
+              <div class="card-head"><div><span class="eyebrow">Структура</span><h3>Расходы</h3></div><span class="pill neutral">этот месяц</span></div>
+              <div id="expenseBreakdown" class="breakdown"></div>
+            </article>
+          </div>
+        </section>
+
+
+        <section class="view" data-view-panel="cashflow" id="cashflowPanel">
+          <div class="section-toolbar">
+            <div>
+              <p class="section-note">Контролируйте деньги заранее: ожидаемые поступления, будущие расходы, просроченную дебиторку и возможные кассовые разрывы.</p>
+            </div>
+            <button class="btn btn-primary" data-open-modal="plannedPayment">+ Плановый платёж</button>
+          </div>
+
+          <div class="metrics-grid mini cashflow-metrics" id="cashflowMetrics"></div>
+
+          <div class="grid two-one cashflow-main-grid">
+            <article class="card cashflow-chart-card">
+              <div class="card-head">
+                <div><span class="eyebrow">Прогноз</span><h3>Ожидаемый остаток денег</h3></div>
+                <select class="select compact" id="cashflowHorizon" aria-label="Горизонт прогноза">
+                  <option value="30">30 дней</option>
+                  <option value="90">90 дней</option>
+                </select>
+              </div>
+              <div class="cashflow-alert" id="cashflowAlert"></div>
+              <div class="chart-wrap cashflow-chart-wrap"><svg id="cashflowChart" viewBox="0 0 720 280" role="img" aria-label="Прогноз остатка денежных средств"></svg></div>
+              <p class="cashflow-disclaimer">Прогноз ориентировочный: он учитывает текущий остаток, счета с актуальными датами поступления и внесённые плановые платежи. Просроченные счета без ожидаемой даты оплаты не увеличивают прогноз.</p>
+            </article>
+
+            <article class="card cash-balance-card">
+              <div class="card-head"><div><span class="eyebrow">Сейчас</span><h3>Доступно денег</h3></div><span class="cash-balance-icon">₽</span></div>
+              <p class="section-note">Укажите сумму, которой бизнес реально располагает сейчас. Она используется как стартовая точка прогноза.</p>
+              <form id="cashBalanceForm" class="cash-balance-form">
+                <label><span>Остаток на счетах и в кассе</span><div class="money-input"><input id="cashBalanceInput" name="cashBalance" type="number" min="0" step="0.01" inputmode="decimal"><strong data-currency-code>BYN</strong></div></label>
+                <button class="btn btn-primary btn-full" type="submit">Сохранить остаток</button>
+              </form>
+              <div class="cashflow-mini-facts" id="cashflowFacts"></div>
+            </article>
+          </div>
+
+          <div class="grid equal cashflow-detail-grid">
+            <article class="card">
+              <div class="card-head"><div><span class="eyebrow">Дебиторка</span><h3>Возраст неоплаченных счетов</h3></div><button class="text-btn" data-go="invoices">Все счета →</button></div>
+              <p class="section-note">Чем дольше счёт не оплачен, тем выше риск для денежного потока. Суммы сгруппированы по сроку просрочки.</p>
+              <div class="aging-grid" id="receivablesAging"></div>
+            </article>
+
+            <article class="card">
+              <div class="card-head"><div><span class="eyebrow">План</span><h3>Будущие платежи</h3></div><button class="btn btn-secondary btn-small" data-open-modal="plannedPayment">+ Добавить</button></div>
+              <div class="planned-payment-list" id="plannedPaymentsList"></div>
+            </article>
+          </div>
+
+          <article class="card receivables-card">
+            <div class="card-head"><div><span class="eyebrow">К получению</span><h3>Неоплаченные счета</h3></div><span class="pill neutral" id="receivablesCount">0</span></div>
+            <div class="receivables-list" id="receivablesList"></div>
+          </article>
+        </section>
+
+        <section class="view" data-view-panel="invoices">
+          <div class="section-toolbar">
+            <div class="segmented" id="invoiceFilters"><button class="active" data-filter="all">Все</button><button data-filter="waiting">Ожидают</button><button data-filter="overdue">Просрочены</button><button data-filter="paid">Оплачены</button></div>
+            <button class="btn btn-primary" data-open-modal="invoice">+ Выставить счёт</button>
+          </div>
+          <div class="invoice-grid" id="invoiceGrid"></div>
+        </section>
+
+        <section class="view" data-view-panel="services">
+          <div class="section-toolbar"><p class="section-note">Каталог товаров и услуг бизнеса</p><button class="btn btn-primary" data-open-modal="service">+ Добавить услугу</button></div>
+          <div class="service-grid" id="serviceGrid"></div>
+        </section>
+
+
+        <section class="view" data-view-panel="notes" id="notesPanel">
+          <div class="section-toolbar notes-toolbar">
+            <div class="notes-toolbar-copy">
+              <p class="section-note">Храните идеи, договорённости, инструкции, чек-листы и всё важное для бизнеса. Ставьте напоминания, связывайте заметки с клиентами и другими данными — изменения сохраняются автоматически.</p>
+            </div>
+            <div class="notes-toolbar-actions">
+              <button class="btn btn-primary" id="newNoteBtn" type="button">+ Новая заметка</button>
+              <button class="btn btn-secondary" id="newNotebookBtn" type="button">+ Блокнот</button>
+              <div class="note-template-create">
+                <select class="select compact" id="noteTemplateSelect" aria-label="Шаблон заметки">
+                  <option value="empty">Пустая заметка</option>
+                  <option value="meeting">Итоги встречи</option>
+                  <option value="client">Карточка клиента</option>
+                  <option value="idea">Бизнес-идея</option>
+                  <option value="weekly">План недели</option>
+                  <option value="sales">Продажный созвон</option>
+                  <option value="sop">Инструкция / регламент</option>
+                  <option value="decision">Принятое решение</option>
+                  <option value="marketing">Маркетинговая гипотеза</option>
+                </select>
+                <button class="btn btn-secondary" id="createNoteFromTemplateBtn" type="button">Создать из шаблона</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="notes-workspace card" id="notesWorkspace">
+            <aside class="notes-sidebar-panel">
+              <div class="notes-panel-title"><span class="eyebrow">Навигация</span><h3>Мои записи</h3></div>
+              <div class="notes-smart-filters" id="notesSmartFilters">
+                <button type="button" data-notes-filter="all" class="active"><span>Все заметки</span><strong id="notesAllCount">0</strong></button>
+                <button type="button" data-notes-filter="pinned"><span>Закреплённые</span><strong id="notesPinnedCount">0</strong></button>
+                <button type="button" data-notes-filter="reminders"><span>Напоминания</span><strong id="notesReminderCount">0</strong></button>
+                <button type="button" data-notes-filter="tasks"><span>Задачи</span><strong id="notesTasksCount">0</strong></button>
+                <button type="button" data-notes-filter="archive"><span>Архив</span><strong id="notesArchiveCount">0</strong></button>
+                <button type="button" data-notes-filter="trash"><span>Корзина</span><strong id="notesTrashCount">0</strong></button>
+              </div>
+              <div class="notes-notebooks-head"><span>Блокноты</span><button type="button" id="newNotebookInlineBtn" aria-label="Создать блокнот">+</button></div>
+              <div class="notebook-list" id="notebookList"></div>
+              <div class="notes-tags-head"><span>Частые теги</span><button type="button" id="clearNoteTagFilter" hidden>Сбросить</button></div>
+              <div class="note-tag-list" id="noteTagList"></div>
+            </aside>
+
+            <section class="notes-list-panel">
+              <div class="notes-list-tools">
+                <label class="inline-search notes-search"><span>⌕</span><input id="notesSearch" type="search" placeholder="Поиск по заметкам, тексту и тегам"></label>
+                <select class="select compact" id="notesSort" aria-label="Сортировка заметок">
+                  <option value="updated">Сначала недавно изменённые</option>
+                  <option value="created">Сначала новые</option>
+                  <option value="title">По названию</option>
+                </select>
+              </div>
+              <div class="notes-list-meta"><strong id="notesListTitle">Все заметки</strong><span id="notesListCount">0</span></div>
+              <div class="notes-list" id="notesList"></div>
+            </section>
+
+            <section class="note-editor-panel" id="noteEditorPanel">
+              <div id="noteEditor" class="note-editor"></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" data-view-panel="analytics">
+          <div class="metrics-grid mini analytics-metrics" id="analyticsMetrics"></div>
+          <div class="analytics-rank-grid">
+            <article class="card"><div class="card-head"><div><span class="eyebrow">Рейтинг</span><h3>Лучшие клиенты</h3></div></div><div id="topClients" class="rank-list"></div></article>
+            <article class="card"><div class="card-head"><div><span class="eyebrow">Продажи</span><h3>Лучшие услуги</h3></div></div><div id="topServices" class="rank-list"></div></article>
+            <article class="card"><div class="card-head"><div><span class="eyebrow">Экономика проектов</span><h3>Прибыльные заказы</h3></div></div><div id="topOrdersProfit" class="rank-list"></div></article>
+          </div>
+          <article class="card insights-card"><div class="card-head"><div><span class="eyebrow">Автоанализ</span><h3>Что стоит заметить</h3></div></div><div class="insights" id="insights"></div></article>
+        </section>
+
+        <section class="view" data-view-panel="calendar" id="calendarPanel">
+          <div class="section-toolbar calendar-toolbar">
+            <div>
+              <p class="section-note">Планируйте встречи, оплаты, дедлайны и задачи. BizPilot напомнит, когда событие приблизится.</p>
+            </div>
+            <div class="calendar-toolbar-actions">
+              <button class="btn btn-secondary" id="calendarTodayBtn" type="button">Сегодня</button>
+              <button class="btn btn-secondary" id="enableCalendarNotifications" type="button">Включить уведомления</button>
+              <button class="btn btn-primary" data-open-modal="event">+ Добавить событие</button>
+            </div>
+          </div>
+
+          <div class="calendar-layout">
+            <article class="card calendar-card">
+              <div class="calendar-head">
+                <button class="icon-btn" id="calendarPrevBtn" type="button" aria-label="Предыдущий месяц">←</button>
+                <div>
+                  <span class="eyebrow">Календарь</span>
+                  <h3 id="calendarMonthTitle">—</h3>
+                </div>
+                <button class="icon-btn" id="calendarNextBtn" type="button" aria-label="Следующий месяц">→</button>
+              </div>
+              <div class="calendar-weekdays"><span>Пн</span><span>Вт</span><span>Ср</span><span>Чт</span><span>Пт</span><span>Сб</span><span>Вс</span></div>
+              <div class="calendar-grid" id="calendarGrid"></div>
+            </article>
+
+            <aside class="card upcoming-card">
+              <div class="card-head">
+                <div><span class="eyebrow">Все события</span><h3>События и напоминания</h3></div>
+                <span class="pill neutral" id="upcomingCount">0</span>
+              </div>
+              <div class="upcoming-list" id="upcomingEvents"></div>
+              <div class="calendar-notice" id="calendarNotificationStatus"></div>
+            </aside>
+          </div>
+        </section>
+
+
+        <section class="view" data-view-panel="notifications" id="notificationsPanel">
+          <div class="section-toolbar notifications-toolbar">
+            <div>
+              <p class="section-note">Единый центр важных напоминаний BizPilot. Непрочитанные уведомления сохраняются, пока вы сами их не обработаете.</p>
+            </div>
+            <div class="notification-toolbar-actions">
+              <button class="btn btn-secondary" id="markAllNotificationsReadBtn" type="button">Отметить все прочитанными</button>
+              <button class="btn btn-secondary" id="clearArchivedNotificationsBtn" type="button">Удалить закрытые</button>
+            </div>
+          </div>
+
+          <div class="notification-summary-grid">
+            <article class="card notification-summary-card"><span class="summary-icon danger">!</span><div><span>Непрочитанные</span><strong id="notificationUnreadCount">0</strong></div></article>
+            <article class="card notification-summary-card"><span class="summary-icon warning">□</span><div><span>Календарь</span><strong id="notificationCalendarCount">0</strong></div></article>
+            <article class="card notification-summary-card"><span class="summary-icon info">▤</span><div><span>Счета и платежи</span><strong id="notificationBusinessCount">0</strong></div></article>
+            <article class="card notification-summary-card"><span class="summary-icon info">✎</span><div><span>Блокноты</span><strong id="notificationNotesCount">0</strong></div></article>
+          </div>
+
+          <article class="card notification-center-card">
+            <div class="notification-center-head">
+              <div class="segmented" id="notificationFilters">
+                <button class="active" data-notification-filter="all">Все</button>
+                <button data-notification-filter="unread">Непрочитанные</button>
+                <button data-notification-filter="calendar">Календарь</button>
+                <button data-notification-filter="money">Деньги</button>
+                <button data-notification-filter="notes">Блокноты</button>
+                <button data-notification-filter="archived">Закрытые</button>
+              </div>
+              <span class="pill neutral" id="notificationListCount">0</span>
+            </div>
+            <div class="notification-list" id="notificationList"></div>
+          </article>
+        </section>
+        <section class="view" data-view-panel="calculations" id="calculationsPanel">
+          <div class="section-toolbar">
+            <div>
+              <p class="section-note">Быстрые бизнес-калькуляторы. Результаты пересчитываются автоматически при вводе.</p>
+            </div>
+            <button class="btn btn-secondary" id="resetCalculatorsBtn" type="button">Сбросить подсчёты</button>
+          </div>
+
+          <div class="calculator-grid">
+            <article class="card calculator-card calculator-visual-card" data-calculator="visuals">
+              <div class="card-head"><div><span class="eyebrow">Визуальный анализ</span><h3>Графики ключевых расчётов</h3></div><span class="calc-icon">▥</span></div>
+              <div class="calculator-body calc-visuals">
+                <div class="calc-mini-chart">
+                  <div class="calc-mini-chart-head"><strong>Цена, затраты и прибыль</strong><span id="calcMarginChartCaption">—</span></div>
+                  <div class="calc-bars">
+                    <div class="calc-bar-row"><span>Цена</span><i><b id="calcBarMarginPrice"></b></i><strong id="calcBarMarginPriceValue">—</strong></div>
+                    <div class="calc-bar-row"><span>Затраты</span><i><b id="calcBarMarginCost"></b></i><strong id="calcBarMarginCostValue">—</strong></div>
+                    <div class="calc-bar-row"><span>Прибыль</span><i><b id="calcBarMarginProfit"></b></i><strong id="calcBarMarginProfitValue">—</strong></div>
+                  </div>
+                </div>
+                <div class="calc-mini-chart">
+                  <div class="calc-mini-chart-head"><strong>Скидка и итоговая цена</strong><span id="calcDiscountChartCaption">—</span></div>
+                  <div class="calc-bars">
+                    <div class="calc-bar-row"><span>Исходная цена</span><i><b id="calcBarDiscountPrice"></b></i><strong id="calcBarDiscountPriceValue">—</strong></div>
+                    <div class="calc-bar-row"><span>После скидки</span><i><b id="calcBarDiscountFinal"></b></i><strong id="calcBarDiscountFinalValue">—</strong></div>
+                    <div class="calc-bar-row"><span>Затраты</span><i><b id="calcBarDiscountCost"></b></i><strong id="calcBarDiscountCostValue">—</strong></div>
+                  </div>
+                </div>
+                <div class="calc-mini-chart">
+                  <div class="calc-mini-chart-head"><strong>Точка безубыточности</strong><span id="calcBreakEvenChartCaption">—</span></div>
+                  <div class="calc-bars">
+                    <div class="calc-bar-row"><span>Постоянные расходы</span><i><b id="calcBarBeFixed"></b></i><strong id="calcBarBeFixedValue">—</strong></div>
+                    <div class="calc-bar-row"><span>Выручка для нуля</span><i><b id="calcBarBeRevenue"></b></i><strong id="calcBarBeRevenueValue">—</strong></div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="card calculator-card" data-calculator="margin">
+              <div class="card-head"><div><span class="eyebrow">Продажи</span><h3>Маржа и наценка</h3></div><span class="calc-icon">%</span></div>
+              <div class="calculator-body">
+                <div class="calc-fields">
+                  <label><span>Прямые затраты на продажу, BYN</span><input id="marginCost" type="number" min="0" step="0.01" value="700"></label>
+                  <label><span>Цена продажи, BYN</span><input id="marginPrice" type="number" min="0" step="0.01" value="1200"></label>
+                </div>
+                <div class="calc-results">
+                  <div><span>Прибыль</span><strong id="marginProfit">—</strong></div>
+                  <div><span>Маржа</span><strong id="marginPercent">—</strong></div>
+                  <div><span>Наценка</span><strong id="markupPercent">—</strong></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="card calculator-card" data-calculator="breakEven">
+              <div class="card-head"><div><span class="eyebrow">Планирование</span><h3>Точка безубыточности</h3></div><span class="calc-icon">◎</span></div>
+              <div class="calculator-body">
+                <div class="calc-fields three">
+                  <label><span>Постоянные расходы, BYN</span><input id="beFixed" type="number" min="0" step="0.01" value="4000"></label>
+                  <label><span>Цена единицы, BYN</span><input id="bePrice" type="number" min="0" step="0.01" value="500"></label>
+                  <label><span>Переменные расходы, BYN</span><input id="beVariable" type="number" min="0" step="0.01" value="180"></label>
+                </div>
+                <div class="calc-results">
+                  <div><span>Нужно продаж</span><strong id="beUnits">—</strong></div>
+                  <div><span>Выручка для нуля</span><strong id="beRevenue">—</strong></div>
+                  <div><span>Вклад с продажи</span><strong id="beContribution">—</strong></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="card calculator-card" data-calculator="rate">
+              <div class="card-head"><div><span class="eyebrow">Цена услуги</span><h3>Минимальная ставка часа</h3></div><span class="calc-icon">⌚</span></div>
+              <div class="calculator-body">
+                <div class="calc-fields four">
+                  <label><span>Желаемый доход, BYN/мес.</span><input id="rateIncome" type="number" min="0" step="0.01" value="5000"></label>
+                  <label><span>Расходы бизнеса, BYN/мес.</span><input id="rateCosts" type="number" min="0" step="0.01" value="1500"></label>
+                  <label><span>Налог / резерв, %</span><input id="rateTax" type="number" min="0" max="99" step="0.1" value="6"></label>
+                  <label><span>Оплачиваемых часов</span><input id="rateHours" type="number" min="1" step="1" value="100"></label>
+                </div>
+                <div class="calc-results">
+                  <div><span>Нужная выручка</span><strong id="rateRevenue">—</strong></div>
+                  <div><span>Минимум за час</span><strong id="rateHourly">—</strong></div>
+                  <div><span>С запасом +20%</span><strong id="rateSafe">—</strong></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="card calculator-card" data-calculator="discount">
+              <div class="card-head"><div><span class="eyebrow">Продажи</span><h3>Скидка от цены продажи</h3></div><span class="calc-icon">−%</span></div>
+              <div class="calculator-body">
+                <div class="calc-fields three">
+                  <label><span>Исходная цена для клиента, BYN</span><input id="discountPrice" type="number" min="0" step="0.01" value="1500"></label>
+                  <label><span>Скидка, %</span><input id="discountRate" type="number" min="0" max="100" step="0.1" value="10"></label>
+                  <label><span>Прямые затраты на продажу, BYN</span><input id="discountCost" type="number" min="0" step="0.01" value="700"></label>
+                </div>
+                <div class="calc-results">
+                  <div><span>Скидка от исходной цены</span><strong id="discountAmount">—</strong></div>
+                  <div><span>Итоговая цена для клиента</span><strong id="discountFinal">—</strong></div>
+                  <div><span>Прибыль с продажи после скидки</span><strong id="discountProfit">—</strong></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="card calculator-card" data-calculator="roi">
+              <div class="card-head"><div><span class="eyebrow">Маркетинг</span><h3>ROI рекламы</h3></div><span class="calc-icon">↗</span></div>
+              <div class="calculator-body">
+                <div class="calc-fields three">
+                  <label><span>Расход на рекламу, BYN</span><input id="roiSpend" type="number" min="0" step="0.01" value="800"></label>
+                  <label><span>Выручка с рекламы, BYN</span><input id="roiRevenue" type="number" min="0" step="0.01" value="3200"></label>
+                  <label><span>Прямые затраты на продажи, BYN</span><input id="roiCost" type="number" min="0" step="0.01" value="1200"></label>
+                </div>
+                <div class="calc-results">
+                  <div><span>Валовая прибыль</span><strong id="roiGross">—</strong></div>
+                  <div><span>Чистый эффект</span><strong id="roiNet">—</strong></div>
+                  <div><span>ROI</span><strong id="roiPercent">—</strong></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="card calculator-card" data-calculator="ltv">
+              <div class="card-head"><div><span class="eyebrow">Клиенты</span><h3>CAC и LTV</h3></div><span class="calc-icon">◎</span></div>
+              <div class="calculator-body">
+                <div class="calc-fields four">
+                  <label><span>Маркетинг, BYN</span><input id="ltvMarketing" type="number" min="0" step="0.01" value="1500"></label>
+                  <label><span>Новых клиентов</span><input id="ltvNewClients" type="number" min="1" step="1" value="10"></label>
+                  <label><span>Средний чек, BYN</span><input id="ltvAverage" type="number" min="0" step="0.01" value="1200"></label>
+                  <label><span>Покупок на клиента</span><input id="ltvPurchases" type="number" min="0" step="0.1" value="3"></label>
+                </div>
+                <div class="calc-results">
+                  <div><span>CAC</span><strong id="ltvCac">—</strong></div>
+                  <div><span>LTV</span><strong id="ltvValue">—</strong></div>
+                  <div><span>LTV / CAC</span><strong id="ltvRatio">—</strong></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="card calculator-card" data-calculator="salesPlan">
+              <div class="card-head"><div><span class="eyebrow">Планирование</span><h3>План продаж</h3></div><span class="calc-icon">▦</span></div>
+              <div class="calculator-body">
+                <div class="calc-fields three">
+                  <label><span>Цель выручки, BYN/мес.</span><input id="planRevenue" type="number" min="0" step="0.01" value="20000"></label>
+                  <label><span>Средний чек, BYN</span><input id="planAverage" type="number" min="1" step="0.01" value="1500"></label>
+                  <label><span>Рабочих дней</span><input id="planDays" type="number" min="1" step="1" value="22"></label>
+                </div>
+                <div class="calc-results">
+                  <div><span>Заказов в месяц</span><strong id="planOrders">—</strong></div>
+                  <div><span>Выручка в день</span><strong id="planDailyRevenue">—</strong></div>
+                  <div><span>Заказов в неделю</span><strong id="planWeeklyOrders">—</strong></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="card calculator-card" data-calculator="runway">
+              <div class="card-head"><div><span class="eyebrow">Устойчивость</span><h3>Финансовая подушка</h3></div><span class="calc-icon">◫</span></div>
+              <div class="calculator-body">
+                <div class="calc-fields three">
+                  <label><span>Денег в резерве, BYN</span><input id="runwayCash" type="number" min="0" step="0.01" value="12000"></label>
+                  <label><span>Расходы в месяц, BYN</span><input id="runwayCosts" type="number" min="0" step="0.01" value="3500"></label>
+                  <label><span>Желаемый запас, мес.</span><input id="runwayTarget" type="number" min="1" step="1" value="6"></label>
+                </div>
+                <div class="calc-results">
+                  <div><span>Подушки хватит</span><strong id="runwayMonths">—</strong></div>
+                  <div><span>Нужно для цели</span><strong id="runwayNeeded">—</strong></div>
+                  <div><span>Не хватает / запас</span><strong id="runwayGap">—</strong></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="card calculator-card" data-calculator="acquiring">
+              <div class="card-head"><div><span class="eyebrow">Платежи</span><h3>Комиссия эквайринга</h3></div><span class="calc-icon">₽</span></div>
+              <div class="calculator-body">
+                <div class="calc-fields three">
+                  <label><span>Сумма платежа, BYN</span><input id="acqAmount" type="number" min="0" step="0.01" value="2000"></label>
+                  <label><span>Комиссия, %</span><input id="acqRate" type="number" min="0" max="100" step="0.01" value="2.5"></label>
+                  <label><span>Фикс. комиссия, BYN</span><input id="acqFixed" type="number" min="0" step="0.01" value="0"></label>
+                </div>
+                <div class="calc-results">
+                  <div><span>Комиссия</span><strong id="acqFee">—</strong></div>
+                  <div><span>Получите на счёт</span><strong id="acqNet">—</strong></div>
+                  <div><span>Эффективная ставка</span><strong id="acqEffective">—</strong></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="card calculator-card" data-calculator="rko">
+              <div class="card-head"><div><span class="eyebrow">Банк</span><h3>Стоимость РКО</h3></div><span class="calc-icon">▤</span></div>
+              <div class="calculator-body">
+                <div class="calc-fields four">
+                  <label><span>Оборот по счёту, BYN/мес.</span><input id="rkoTurnover" type="number" min="0" step="0.01" value="20000"></label>
+                  <label><span>Абонплата, BYN/мес.</span><input id="rkoMonthlyFee" type="number" min="0" step="0.01" value="35"></label>
+                  <label><span>Платежей в месяц, шт.</span><input id="rkoPayments" type="number" min="0" step="1" value="20"></label>
+                  <label><span>Цена одного платежа, BYN</span><input id="rkoPaymentFee" type="number" min="0" step="0.01" value="1.5"></label>
+                  <label><span>Прочие комиссии, BYN/мес.</span><input id="rkoOtherFees" type="number" min="0" step="0.01" value="10"></label>
+                </div>
+                <div class="calc-results">
+                  <div><span>РКО в месяц</span><strong id="rkoMonthly">—</strong></div>
+                  <div><span>РКО в год</span><strong id="rkoYearly">—</strong></div>
+                  <div><span>Доля от оборота</span><strong id="rkoShare">—</strong></div>
+                </div>
+                <p class="calc-note">Введите тариф своего банка: абонплату, стоимость платёжных поручений и другие регулярные комиссии.</p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="view" data-view-panel="learning" id="learningPanel">
+          <div class="learning-hero" id="learningStart">
+            <div class="learning-hero-copy">
+              <span class="learning-kicker">Академия BizPilot</span>
+              <h2>Научитесь вести бизнес в BizPilot уверенно — от первого клиента до контроля денег</h2>
+              <p>Это не просто справка. Пройдите понятный маршрут, повторяйте действия прямо в сервисе, тренируйтесь в безопасном демо и выработайте рабочую привычку: продажи → выполнение → счета → деньги → анализ.</p>
+              <div class="learning-hero-actions">
+                <button class="btn btn-primary" id="learningNextActionBtn" type="button" data-learning-next>Продолжить обучение</button>
+                <button class="btn btn-secondary learning-hero-secondary" type="button" data-learning-scroll="learningCourse">Открыть программу</button>
+                <button class="btn btn-secondary learning-hero-secondary" type="button" data-learning-scroll="learningDemo">Потренироваться в демо</button>
+              </div>
+            </div>
+            <div class="learning-hero-aside">
+              <div class="learning-score">
+                <span>Готовность BizPilot к работе</span>
+                <strong id="learningProgressValue">0%</strong>
+                <div class="learning-score-bar"><i id="learningProgressBar"></i></div>
+                <small id="learningProgressHint">Начните с данных бизнеса</small>
+              </div>
+              <div class="learning-course-score">
+                <span>Освоение обучения</span>
+                <strong id="learningCourseProgress">0/9</strong>
+                <small id="learningCourseHint">Отмечайте уроки после практики</small>
+              </div>
+              <div class="learning-mode-chip" id="learningModeChip">Рабочий режим</div>
+            </div>
+          </div>
+
+          <nav class="learning-local-nav" aria-label="Навигация по обучению">
+            <button type="button" data-learning-scroll="learningQuickStart">Быстрый старт</button>
+            <button type="button" data-learning-scroll="learningCourse">Программа</button>
+            <button type="button" data-learning-scroll="learningGuide">Разделы сервиса</button>
+            <button type="button" data-learning-scroll="learningFirstSale">Первая продажа</button>
+            <button type="button" data-learning-scroll="learningRoutine">Рабочий ритм</button>
+            <button type="button" data-learning-scroll="learningReference">Шпаргалка</button>
+            <button type="button" data-learning-scroll="learningFaq">FAQ</button>
+          </nav>
+
+          <div class="learning-dashboard-grid">
+            <article class="card learning-next-card">
+              <div class="learning-next-icon" aria-hidden="true">→</div>
+              <div>
+                <span class="eyebrow">Лучший следующий шаг</span>
+                <h3 id="learningNextTitle">Начните с настройки бизнеса</h3>
+                <p id="learningNextText">BizPilot подскажет, что лучше сделать дальше именно с учётом ваших данных.</p>
+              </div>
+              <button class="btn btn-primary btn-small" type="button" data-learning-next id="learningNextCardBtn">Выполнить шаг</button>
+            </article>
+
+            <article class="card learning-principles-card">
+              <div class="card-head"><div><span class="eyebrow">Модель работы</span><h3>Пять сущностей, которые важно не путать</h3></div></div>
+              <div class="learning-flow">
+                <div><span>1</span><strong>Клиент</strong><small>Кто покупает</small></div>
+                <b>→</b>
+                <div><span>2</span><strong>Сделка</strong><small>Что можете продать</small></div>
+                <b>→</b>
+                <div><span>3</span><strong>Заказ</strong><small>Что уже выполняете</small></div>
+                <b>→</b>
+                <div><span>4</span><strong>Счёт</strong><small>Что должны оплатить</small></div>
+                <b>→</b>
+                <div><span>5</span><strong>Финансы</strong><small>Что реально пришло / ушло</small></div>
+              </div>
+              <div class="learning-tip"><strong>Запомните одну формулу</strong><p>Сделка — ещё не деньги. Заказ — ещё не оплата. Счёт — ещё не поступление. Финансы отражают уже состоявшееся движение денег.</p></div>
+            </article>
+          </div>
+
+          <article class="card learning-setup-card" id="learningQuickStart">
+            <div class="learning-section-head">
+              <div>
+                <span class="eyebrow">Быстрый старт · 10–15 минут</span>
+                <h3>Настройте BizPilot под свой бизнес</h3>
+                <p>Шесть базовых шагов. После них обзор, счета, прогноз и аналитика начнут опираться на ваши реальные данные.</p>
+              </div>
+              <div class="onboarding-progress"><strong id="learningStepsDone">0/6</strong><span>готово</span></div>
+            </div>
+            <div class="onboarding-progressbar"><i id="learningStepsBar"></i></div>
+            <div class="onboarding-steps learning-onboarding-steps" id="learningOnboarding"></div>
+            <div class="learning-setup-advice"><strong>Не заполняйте всё заранее.</strong><span>Лучший способ освоить BizPilot — настроить минимум и сразу провести одну настоящую продажу от клиента до оплаты.</span></div>
+          </article>
+
+          <section class="learning-section" id="learningCourse">
+            <div class="learning-section-title learning-section-title-row">
+              <div>
+                <span class="eyebrow">Программа обучения</span>
+                <h2>9 коротких уроков с практикой</h2>
+                <p>Читайте урок, выполняйте действие в сервисе и отмечайте его пройденным. Прогресс сохраняется в браузере.</p>
+              </div>
+              <div class="learning-course-total"><strong id="learningCoursePercent">0%</strong><span>пройдено</span></div>
+            </div>
+            <div class="learning-course-grid" id="learningCourseGrid"></div>
+          </section>
+
+          <article class="card demo-lab-card learning-demo-wide" id="learningDemo">
+            <div class="card-head">
+              <div><span class="eyebrow">Тренажёр</span><h3>Учебный демо-режим — попробуйте всё без риска</h3></div>
+              <span class="pill neutral" id="demoLearningStatus">Выключен</span>
+            </div>
+            <div class="demo-lab-wide-grid">
+              <div class="demo-lab-body">
+                <p>Демо временно заменяет рабочую область готовыми примерами. Ваши реальные данные сохраняются отдельно в этом браузере и возвращаются после выхода.</p>
+                <div class="demo-safety-list">
+                  <div><span>1</span><p><strong>Откройте «Продажи»</strong><small>Поменяйте этап сделки и посмотрите, как меняется воронка.</small></p></div>
+                  <div><span>2</span><p><strong>Откройте «Заказы»</strong><small>Запустите таймер и посмотрите план / факт человеко-часов.</small></p></div>
+                  <div><span>3</span><p><strong>Откройте «Счета»</strong><small>Отметьте счёт оплаченным и затем проверьте поступление в финансах.</small></p></div>
+                  <div><span>4</span><p><strong>Откройте «Денежный поток»</strong><small>Добавьте будущий расход и оцените, меняется ли прогноз остатка.</small></p></div>
+                </div>
+              </div>
+              <div class="demo-mission-panel">
+                <span class="eyebrow">Практическая миссия</span>
+                <h4>Пройдите цепочку целиком</h4>
+                <ol>
+                  <li>Клиент → сделка</li><li>Сделка → заказ</li><li>Заказ → счёт</li><li>Счёт → оплата</li><li>Оплата → аналитика</li>
+                </ol>
+                <div class="demo-lab-actions">
+                  <button class="btn btn-primary" id="startDemoModeBtn" type="button">Запустить демо</button>
+                  <button class="btn btn-secondary" id="resetTrainingDemoBtn" type="button" hidden>Обновить примеры</button>
+                  <button class="btn btn-danger-soft" id="exitDemoModeBtn" type="button" hidden>Выйти из демо</button>
+                </div>
+                <div class="demo-lab-note" id="demoLearningNote">Демо можно включить в любой момент. Рабочая область будет сохранена автоматически.</div>
+              </div>
+            </div>
+          </article>
+
+          <section class="learning-section" id="learningGuide">
+            <div class="learning-section-title">
+              <span class="eyebrow">Карта сервиса</span>
+              <h2>Что делать в каждом разделе — и какой результат вы должны получить</h2>
+              <p>Ориентируйтесь не на количество заполненных полей, а на управленческий результат каждого раздела.</p>
+            </div>
+            <div class="learning-guide-grid learning-guide-grid-rich">
+              <article class="card learning-guide-card"><div class="learning-guide-icon">01</div><div><span class="eyebrow">Продажи</span><h3>Клиенты → Сделки</h3></div><p>Клиент хранит постоянную информацию. Сделка хранит конкретную возможность продажи: сумму, этап, следующий шаг и срок контакта.</p><div class="learning-guide-facts"><span><b>Результат:</b> ни один лид не потерян</span><span><b>Ошибка:</b> вести потенциальную продажу сразу как заказ</span></div><div class="learning-card-actions"><button class="text-btn" data-go="clients">Клиенты →</button><button class="text-btn" data-go="sales">Сделки →</button></div></article>
+              <article class="card learning-guide-card"><div class="learning-guide-icon">02</div><div><span class="eyebrow">Исполнение</span><h3>Заказы и человеко-часы</h3></div><p>Заказ начинается, когда работа реально принята. Фиксируйте сумму, срок, прямые затраты, план часов и фактическое время.</p><div class="learning-guide-facts"><span><b>Результат:</b> видно, что в работе и насколько это выгодно</span><span><b>Ошибка:</b> забывать обновлять статус после завершения</span></div><div class="learning-card-actions"><button class="text-btn" data-go="orders">Заказы →</button></div></article>
+              <article class="card learning-guide-card"><div class="learning-guide-icon">03</div><div><span class="eyebrow">Оплата</span><h3>Счета → Финансы</h3></div><p>Счёт — ваше требование к оплате. Финансы — уже состоявшийся денежный факт. При отметке счёта оплаченным BizPilot связывает оплату с финансами.</p><div class="learning-guide-facts"><span><b>Результат:</b> понятно, кто должен и сколько уже получено</span><span><b>Ошибка:</b> считать выставленный счёт реальной выручкой</span></div><div class="learning-card-actions"><button class="text-btn" data-go="invoices">Счета →</button><button class="text-btn" data-go="finance">Финансы →</button></div></article>
+              <article class="card learning-guide-card"><div class="learning-guide-icon">04</div><div><span class="eyebrow">Будущее денег</span><h3>Денежный поток</h3></div><p>Здесь живут будущие поступления и расходы. Укажите реальный остаток и обязательства — так вы увидите риск кассового разрыва заранее.</p><div class="learning-guide-facts"><span><b>Результат:</b> понимаете будущий остаток по датам</span><span><b>Ошибка:</b> заносить уже совершённые платежи как будущие</span></div><div class="learning-card-actions"><button class="text-btn" data-go="cashflow">Денежный поток →</button></div></article>
+              <article class="card learning-guide-card"><div class="learning-guide-icon">05</div><div><span class="eyebrow">Организация</span><h3>Календарь, уведомления, блокноты</h3></div><p>Календарь хранит даты, уведомления собирают важное, блокноты — контекст, инструкции, встречи и идеи, которые не являются сделками или заказами.</p><div class="learning-guide-facts"><span><b>Результат:</b> сроки и договорённости не живут «в голове»</span><span><b>Ошибка:</b> записывать дедлайны только в заметку</span></div><div class="learning-card-actions"><button class="text-btn" data-go="calendar">Календарь →</button><button class="text-btn" data-go="notes">Блокноты →</button></div></article>
+              <article class="card learning-guide-card"><div class="learning-guide-icon">06</div><div><span class="eyebrow">Решения</span><h3>Аналитика и подсчёты</h3></div><p>Аналитика отвечает на вопрос «что происходит в бизнесе», а подсчёты помогают проверить конкретное решение: цену, скидку, ставку часа, РКО и окупаемость.</p><div class="learning-guide-facts"><span><b>Результат:</b> решения опираются на цифры</span><span><b>Ошибка:</b> анализировать данные, которые давно не обновлялись</span></div><div class="learning-card-actions"><button class="text-btn" data-go="analytics">Аналитика →</button><button class="text-btn" data-go="calculations">Подсчёты →</button></div></article>
+            </div>
+          </section>
+
+          <div class="learning-bottom-grid" id="learningFirstSale">
+            <article class="card learning-playbook-card">
+              <div class="card-head"><div><span class="eyebrow">Главное упражнение</span><h3>Проведите одну продажу от начала до конца</h3></div><span class="pill info">20–30 минут</span></div>
+              <ol class="learning-playbook">
+                <li><span>1</span><div><strong>Заполните компанию и реквизиты</strong><p>Достаточно данных, нужных вам в документах.</p></div><button class="text-btn" data-go="settings">Открыть</button></li>
+                <li><span>2</span><div><strong>Добавьте товар или услугу</strong><p>Название и ориентировочная цена ускорят работу дальше.</p></div><button class="text-btn" data-open-modal="service">Добавить</button></li>
+                <li><span>3</span><div><strong>Создайте клиента</strong><p>Контакты + реквизиты, если выставляете документы.</p></div><button class="text-btn" data-open-modal="client">Добавить</button></li>
+                <li><span>4</span><div><strong>Создайте сделку и следующий шаг</strong><p>Так вы тренируете правильную дисциплину продаж.</p></div><button class="text-btn" data-open-modal="deal">Создать</button></li>
+                <li><span>5</span><div><strong>Создайте заказ после подтверждения</strong><p>Зафиксируйте срок, затраты и план времени.</p></div><button class="text-btn" data-open-modal="order">Создать</button></li>
+                <li><span>6</span><div><strong>Выставьте счёт</strong><p>Пока оплаты нет — деньги остаются дебиторкой.</p></div><button class="text-btn" data-open-modal="invoice">Выставить</button></li>
+                <li><span>7</span><div><strong>Отметьте оплату только по факту</strong><p>После реального поступления переведите счёт в «Оплачен».</p></div><button class="text-btn" data-go="invoices">Счета</button></li>
+                <li><span>8</span><div><strong>Проверьте финансы и аналитику</strong><p>Убедитесь, что операция отражена, а показатели стали понятнее.</p></div><button class="text-btn" data-go="analytics">Аналитика</button></li>
+              </ol>
+            </article>
+
+            <article class="card learning-mistakes-card">
+              <div class="card-head"><div><span class="eyebrow">Типичные ошибки</span><h3>Что чаще всего портит данные</h3></div></div>
+              <div class="learning-mistakes-list">
+                <div><span>!</span><p><strong>Создавать дубликаты клиентов</strong><small>Новый заказ и счёт привязывайте к существующей карточке клиента.</small></p></div>
+                <div><span>!</span><p><strong>Путать счёт и деньги</strong><small>Выставленный счёт — это дебиторка, а не уже полученные деньги.</small></p></div>
+                <div><span>!</span><p><strong>Не обновлять статусы</strong><small>Просроченный статус делает обзор, уведомления и аналитику менее полезными.</small></p></div>
+                <div><span>!</span><p><strong>Игнорировать будущие расходы</strong><small>Без них прогноз обычно выглядит слишком оптимистично.</small></p></div>
+                <div><span>!</span><p><strong>Считать выручку прибылью</strong><small>Смотрите прямые затраты и трудозатраты, а не только сумму заказа.</small></p></div>
+              </div>
+            </article>
+          </div>
+
+          <section class="learning-section" id="learningRoutine">
+            <div class="learning-section-title"><span class="eyebrow">Рабочий ритм</span><h2>Как пользоваться BizPilot после обучения</h2><p>Сервис приносит пользу, когда его обновляют короткими регулярными подходами, а не «раз в месяц всё вспомнить».</p></div>
+            <div class="learning-routine-grid">
+              <article class="card learning-routine-card"><span class="learning-routine-time">5 минут</span><h3>Каждый рабочий день</h3><ul><li>Просмотрите уведомления и просрочки.</li><li>Обновите этапы активных сделок и следующий шаг.</li><li>Обновите статусы заказов.</li><li>Запишите реальные поступления и расходы.</li></ul></article>
+              <article class="card learning-routine-card"><span class="learning-routine-time">15 минут</span><h3>Раз в неделю</h3><ul><li>Проверьте неоплаченные счета.</li><li>Посмотрите денежный поток на 30 дней.</li><li>Добавьте будущие крупные расходы.</li><li>Проверьте загрузку заказов и сроки.</li></ul></article>
+              <article class="card learning-routine-card"><span class="learning-routine-time">30 минут</span><h3>Раз в месяц</h3><ul><li>Откройте аналитику и найдите самые прибыльные услуги.</li><li>Посмотрите клиентов по выручке и дебиторке.</li><li>Проверьте ставку часа и банковские расходы.</li><li>Скачайте резервную ZIP-копию.</li></ul></article>
+            </div>
+          </section>
+
+          <div class="learning-bottom-grid" id="learningReference">
+            <article class="card learning-reference-card">
+              <div class="card-head"><div><span class="eyebrow">Шпаргалка</span><h3>Куда что записывать</h3></div></div>
+              <div class="learning-reference-list">
+                <div><strong>«Мне могут заплатить»</strong><span>Продажи / Сделки</span></div><div><strong>«Я уже выполняю работу»</strong><span>Заказы</span></div><div><strong>«Клиент должен денег»</strong><span>Счета</span></div><div><strong>«Деньги реально пришли / ушли»</strong><span>Финансы</span></div><div><strong>«Деньги придут / уйдут позже»</strong><span>Денежный поток</span></div><div><strong>«Нужно не забыть дату»</strong><span>Календарь</span></div><div><strong>«Нужно сохранить контекст / идею»</strong><span>Блокноты</span></div><div><strong>«Нужно быстро проверить расчёт»</strong><span>Подсчёты</span></div>
+              </div>
+            </article>
+            <article class="card learning-glossary-card">
+              <div class="card-head"><div><span class="eyebrow">Мини-словарь</span><h3>Термины простыми словами</h3></div></div>
+              <div class="learning-glossary">
+                <div><b>Выручка</b><span>Сколько заработано от продаж до вычета расходов.</span></div><div><b>Прямые затраты</b><span>Расходы, которые напрямую относятся к конкретной работе.</span></div><div><b>Маржа</b><span>Разница между ценой и прямыми затратами.</span></div><div><b>Дебиторка</b><span>Деньги, которые клиенты вам ещё должны.</span></div><div><b>Денежный поток</b><span>Когда и сколько денег реально приходит и уходит.</span></div><div><b>Кассовый разрыв</b><span>Момент, когда обязательства наступают раньше поступлений.</span></div><div><b>Воронка</b><span>Сделки по этапам от первого контакта до продажи.</span></div><div><b>План / факт часов</b><span>Сколько времени ожидали потратить и сколько ушло реально.</span></div>
+              </div>
+            </article>
+          </div>
+
+          <article class="card learning-safety-card">
+            <div class="card-head"><div><span class="eyebrow">Качество данных</span><h3>Четыре привычки, которые делают BizPilot точным</h3></div></div>
+            <div class="learning-safety-grid learning-safety-grid-four">
+              <div><span>ZIP</span><strong>Резервная копия</strong><p>Перед крупными изменениями и хотя бы раз в месяц скачивайте ZIP.</p><button class="text-btn" data-go="profile">Резервные копии →</button></div>
+              <div><span>✓</span><strong>Актуальные статусы</strong><p>Закрыли работу, получили оплату, потеряли сделку — сразу обновите статус.</p></div>
+              <div><span>1×</span><strong>Без дублей</strong><p>Один клиент — одна карточка. Это сохраняет корректную историю и аналитику.</p></div>
+              <div><span>₽</span><strong>Факт отдельно от плана</strong><p>Финансы — совершившиеся операции. Денежный поток — ожидаемые будущие.</p></div>
+            </div>
+          </article>
+
+          <article class="card learning-faq-card" id="learningFaq">
+            <div class="card-head"><div><span class="eyebrow">Частые вопросы</span><h3>Ответы, которые помогают не запутаться</h3></div></div>
+            <div class="learning-faq">
+              <details><summary>С чего начать, если сервис пока пустой?</summary><p>Заполните название бизнеса, добавьте одну услугу и одного реального клиента. Затем проведите одну продажу по сценарию на этой странице. Не нужно заранее переносить в BizPilot всю историю бизнеса.</p></details>
+              <details><summary>Чем сделка отличается от заказа?</summary><p>Сделка — потенциальная продажа, которая ещё может не состояться. Заказ — уже подтверждённая работа, которую вы выполняете или обязались выполнить.</p></details>
+              <details><summary>Чем счёт отличается от операции в финансах?</summary><p>Счёт означает, что клиент должен заплатить. Финансовая операция означает, что деньги уже фактически пришли или ушли.</p></details>
+              <details><summary>Когда использовать денежный поток?</summary><p>Когда хотите увидеть будущее: ожидаемые оплаты, будущие расходы и прогноз остатка. Для уже состоявшихся платежей используйте «Финансы».</p></details>
+              <details><summary>Что делать, если один клиент заказывает несколько раз?</summary><p>Не создавайте новую карточку клиента. Используйте существующего клиента и создавайте новые сделки, заказы и счета — тогда история останется целостной.</p></details>
+              <details><summary>Нужно ли заполнять все поля клиента и компании?</summary><p>Нет. Заполняйте только то, что реально нужно в вашей работе. Юридические и банковские реквизиты особенно полезны, если вы формируете счета и договоры.</p></details>
+              <details><summary>Как понять, что цена на услугу нормальная?</summary><p>Используйте «Подсчёты»: маржа, ставка часа, скидка и другие калькуляторы помогают увидеть, остаётся ли прибыль после прямых затрат и вашего времени.</p></details>
+              <details><summary>Как не забывать про оплату и сроки?</summary><p>Указывайте даты в сделках, заказах, счетах и календаре. Уведомления будут собирать важные события и просрочки в одном месте.</p></details>
+              <details><summary>Можно ли безопасно потренироваться?</summary><p>Да. Включите учебный демо-режим на этой странице. Рабочая область сохраняется отдельно и возвращается после выхода.</p></details>
+              <details><summary>Как понять, что я уже освоил BizPilot?</summary><p>Вы готовы к ежедневной работе, если можете без подсказки провести цепочку «клиент → сделка → заказ → счёт → оплата», объяснить разницу между финансами и денежным потоком и раз в неделю проверять счета, прогноз и аналитику.</p></details>
+            </div>
+          </article>
+        </section>
+
+        <section class="view" data-view-panel="profile">
+          <div class="backup-hero card">
+            <div>
+              <span class="eyebrow">Резервная копия BizPilot</span>
+              <h2>Ваши данные под вашим контролем</h2>
+              <p>Скачайте все данные сервиса одним ZIP-архивом или восстановите их на этом устройстве из ранее сохранённой копии.</p>
+            </div>
+            <button class="btn btn-primary" id="exportDataBtn" type="button">↓ Экспортировать все данные</button>
+          </div>
+
+          <div class="backup-grid">
+            <article class="card backup-card">
+              <div class="backup-icon">ZIP</div>
+              <span class="eyebrow">Экспорт</span>
+              <h3>Скачать резервную копию</h3>
+              <p>В архив попадут заказы, клиенты, сделки, счета, финансы, плановые платежи, услуги, блокноты, заметки, календарь, уведомления, настройки бизнеса, профиль, реквизиты, интерфейс и значения калькуляторов.</p>
+              <div class="backup-meta"><span>Формат</span><strong>BizPilot ZIP</strong></div>
+              <div class="backup-meta"><span>Локальный объём данных</span><strong id="backupSize">—</strong></div>
+              <button class="btn btn-secondary btn-full" id="exportDataBtnSecondary" type="button">Скачать ZIP</button>
+            </article>
+
+            <article class="card backup-card">
+              <div class="backup-icon">↑</div>
+              <span class="eyebrow">Импорт</span>
+              <h3>Загрузить все данные</h3>
+              <p>Выберите ZIP-архив, созданный BizPilot. Перед восстановлением текущие локальные данные будут заменены содержимым копии.</p>
+              <label class="backup-dropzone" id="backupDropzone" for="importDataInput">
+                <strong>Выбрать ZIP-архив</strong>
+                <span>или перетащите файл сюда</span>
+                <input id="importDataInput" type="file" accept=".zip,application/zip" hidden>
+              </label>
+              <div class="backup-status" id="backupImportStatus">Резервная копия ещё не загружалась.</div>
+            </article>
+          </div>
+
+          <article class="card backup-summary-card">
+            <div class="card-head"><div><span class="eyebrow">Содержимое</span><h3>Что сейчас хранится в BizPilot</h3></div><span class="pill neutral">Локально в браузере</span></div>
+            <div class="backup-summary" id="backupSummary"></div>
+            <div class="privacy-note backup-note"><strong>Важно</strong><p>Экспорт не отправляет данные на сервер: архив формируется прямо в браузере. Импорт предназначен для ZIP-копий, созданных BizPilot.</p></div>
+          </article>
+
+          <article class="card data-health-card">
+            <div class="card-head">
+              <div><span class="eyebrow">Контроль целостности</span><h3>Проверка данных</h3></div>
+              <span class="pill success" id="dataHealthStatus">Проверяем…</span>
+            </div>
+            <p class="section-note data-health-note">BizPilot проверяет связи оплаченных счетов с финансами, служебные записи уведомлений и другие места, где после импорта или ручных изменений могут появиться несогласованные данные.</p>
+            <div class="data-health-list" id="dataHealthList"></div>
+            <div class="data-health-actions"><button class="btn btn-secondary" id="repairDataBtn" type="button" hidden>Исправить автоматически</button></div>
+          </article>
+        </section>
+
+        <section class="view" data-view-panel="updates" id="updatesPanel">
+          <div class="release-hero card">
+            <div class="release-hero-main">
+              <span class="release-badge">Текущая версия</span>
+              <h2>BizPilot <span data-app-version>17.0</span></h2>
+              <p>История развития сервиса: новые возможности, исправления и улучшения, которые уже вошли в BizPilot.</p>
+            </div>
+            <div class="release-hero-meta">
+              <span>Последнее обновление</span>
+              <strong>12 сентября 2026</strong>
+              <small>Все изменения ниже уже доступны в текущей версии BizPilot.</small>
+            </div>
+          </div>
+
+          <div class="release-layout">
+            <div class="release-side-stack">
+              <aside class="card release-side-card">
+                <span class="eyebrow">О версии</span>
+                <h3>Что изменилось</h3>
+                <p>Здесь собрана история изменений BizPilot. Можно быстро узнать, что нового появилось в каждой версии, какие возможности были добавлены и какие проблемы исправлены.</p>
+                <div class="release-stat"><span>Текущая версия</span><strong data-app-version>17.0</strong></div>
+                <div class="release-stat"><span>Версий в истории</span><strong>21</strong></div>
+                <button class="btn btn-secondary btn-full" type="button" data-go="profile">Создать резервную копию</button>
+              </aside>
+
+              <article class="card developer-card">
+                <span class="eyebrow">Разработчик</span>
+                <div class="developer-profile">
+                  <div class="developer-avatar" aria-hidden="true">ДК</div>
+                  <div class="developer-copy">
+                    <h3>Дмитрий Колесниченко</h3>
+                    <p>Разработчик BizPilot</p>
+                  </div>
+                </div>
+                <div class="developer-contacts">
+                  <a class="developer-contact" href="mailto:zeter11@gmail.com">
+                    <span class="developer-contact-icon" aria-hidden="true">@</span>
+                    <span><small>Email</small><strong>zeter11@gmail.com</strong></span>
+                  </a>
+                  <a class="developer-contact" href="https://t.me/zeterchat" target="_blank" rel="noopener noreferrer">
+                    <span class="developer-contact-icon" aria-hidden="true">↗</span>
+                    <span><small>Telegram</small><strong>@zeterchat</strong></span>
+                  </a>
+                  <a class="developer-contact" href="https://www.linkedin.com/in/zeter/" target="_blank" rel="noopener noreferrer">
+                    <span class="developer-contact-icon" aria-hidden="true">in</span>
+                    <span><small>LinkedIn</small><strong>linkedin.com/in/zeter</strong></span>
+                  </a>
+                </div>
+              </article>
+            </div>
+
+            <div class="release-timeline">
+
+              <article class="card release-item current-release">
+                <div class="release-item-head">
+                  <div><span class="release-version">Версия 17.0</span><h3>Академия BizPilot: обучение от первого шага до уверенной ежедневной работы</h3></div>
+                  <time datetime="2026-09-12">12.09.2026</time>
+                </div>
+                <p>Раздел обучения полностью переработан в интерактивную академию: теперь он не просто знакомит с интерфейсом, а ведёт пользователя по логике бизнеса, практике и регулярной работе в BizPilot.</p>
+                <ul>
+                  <li>Добавлен динамический «Лучший следующий шаг», который подсказывает действие исходя из уже заполненных данных.</li>
+                  <li>Появилась программа из 9 коротких уроков с практическими целями и сохраняемым прогрессом.</li>
+                  <li>Учебный демо-режим превращён в тренажёр с конкретной практической миссией по всей цепочке продажи.</li>
+                  <li>Карта разделов теперь объясняет не только функции, но и ожидаемый управленческий результат и типичные ошибки.</li>
+                  <li>Добавлен подробный сценарий первой продажи: компания → услуга → клиент → сделка → заказ → счёт → оплата → аналитика.</li>
+                  <li>Добавлен рабочий ритм на день, неделю и месяц, чтобы пользователь поддерживал данные актуальными.</li>
+                  <li>Добавлены типичные ошибки, расширенная шпаргалка, мини-словарь предпринимателя и расширенный FAQ.</li>
+                  <li>Добавлена внутренняя навигация по обучению и улучшена мобильная адаптация длинной учебной страницы.</li>
+                </ul>
+              </article>
+
+              <article class="card release-item">
+                <div class="release-item-head">
+                  <div><span class="release-version">Версия 16.2</span><h3>Исправлено выравнивание профиля в боковой панели</h3></div>
+                  <time datetime="2026-09-12">12.09.2026</time>
+                </div>
+                <p>Небольшое точечное обновление интерфейса: блок пользователя внизу боковой панели стал визуально ровнее и аккуратнее.</p>
+                <ul>
+                  <li>Выровнены аватар, имя пользователя и роль внутри карточки профиля.</li>
+                  <li>Улучшены отступы, вертикальное центрирование и поведение длинных имён.</li>
+                  <li>Стрелка перехода теперь тоже стоит ровно по центру относительно контента.</li>
+                </ul>
+              </article>
+
+              <article class="card release-item">
+                <div class="release-item-head">
+                  <div><span class="release-version">Версия 16.1</span><h3>Карточка разработчика в истории обновлений</h3></div>
+                  <time datetime="2026-09-12">12.09.2026</time>
+                </div>
+                <p>На странице обновлений появился отдельный блок с информацией о разработчике BizPilot и быстрыми способами связи.</p>
+                <ul>
+                  <li>Добавлено имя разработчика — Дмитрий Колесниченко.</li>
+                  <li>Добавлены прямые ссылки на Email, Telegram и LinkedIn.</li>
+                  <li>Контакты оформлены отдельной компактной карточкой в левой колонке страницы обновлений.</li>
+                </ul>
+              </article>
+
+              <article class="card release-item">
+                <div class="release-item-head">
+                  <div><span class="release-version">Версия 16.0</span><h3>Новый центр обучения и безопасный учебный демо-режим</h3></div>
+                  <time datetime="2026-09-12">12.09.2026</time>
+                </div>
+                <p>Онбординг вынесен из рабочего обзора в отдельный центр обучения. Теперь интерфейс бизнеса не занят учебными блоками, а обучение, быстрый старт и демо собраны в одном понятном месте.</p>
+                <ul>
+                  <li>Добавлен отдельный раздел «Обучение» в главном меню с быстрым стартом, маршрутом по сервису, практическим сценарием и FAQ.</li>
+                  <li>Блок «Настройте BizPilot под свой бизнес» перенесён с обзора на страницу обучения и показывает реальный прогресс настройки.</li>
+                  <li>Демо больше не занимает место в боковой панели и не включается автоматически для нового пользователя.</li>
+                  <li>Учебный демо-режим запускается вручную на странице обучения и заполняет сервис примерами для безопасной практики.</li>
+                  <li>Перед запуском демо текущая рабочая область сохраняется отдельно в браузере; после выхода BizPilot восстанавливает её обратно.</li>
+                  <li>В активном демо можно одним действием обновить примеры до исходного состояния, не затрагивая сохранённую рабочую область.</li>
+                  <li>Добавлена понятная схема «клиент → сделка → заказ → счёт → финансы» и подсказка, какие данные в какой раздел заносить.</li>
+                  <li>Добавлен практический маршрут первой продажи от настройки компании до аналитики.</li>
+                  <li>Убраны устаревшие упоминания «демо-версии» из рабочих реквизитов и печатного счёта.</li>
+                  <li>Формат резервной копии обновлён до v9.</li>
+                </ul>
+              </article>
+
+              <article class="card release-item">
+                <div class="release-item-head">
+                  <div><span class="release-version">Версия 15.0</span><h3>Время, РКО, договоры, авто-тема и умные реквизиты</h3></div>
+                  <time datetime="2026-09-12">12.09.2026</time>
+                </div>
+                <p>Крупное обновление по обратной связи пользователей: BizPilot стал точнее учитывать реальные затраты, рабочее время и банковские расходы, а рутинные реквизиты и документы стали заполняться быстрее.</p>
+                <ul>
+                  <li>В заказах появился трекинг человеко-часов: план, фактически учтённое время и таймер.</li>
+                  <li>Термин «себестоимость» заменён на более понятные «прямые затраты» в рабочих сценариях.</li>
+                  <li>В подсчётах появились наглядные графики и калькулятор стоимости РКО.</li>
+                  <li>По клиенту можно автоматически сформировать готовый к печати шаблон договора.</li>
+                  <li>Для белорусских реквизитов добавлено автозаполнение банка и BIC.</li>
+                  <li>Тема получила автоматический режим по времени восхода и заката.</li>
+                </ul>
+              </article>
+
+              <article class="card release-item">
+                <div class="release-item-head">
+                  <div><span class="release-version">Версия 14.2</span><h3>Расширенная карточка клиента и реквизиты контрагента</h3></div>
+                  <time datetime="2026-09-09">09.09.2026</time>
+                </div>
+                <p>Карточка клиента стала полноценным профилем контрагента: теперь в BizPilot можно хранить подробную информацию о компании, контактах, юридических и банковских реквизитах, договоре и условиях работы.</p>
+                <ul>
+                  <li>Форма клиента разделена на понятные вкладки: «Основное», «Контакты», «Реквизиты», «Банк» и «Условия».</li>
+                  <li>Добавлены тип клиента, сфера деятельности, сайт, источник, описание компании и теги.</li>
+                  <li>Для контактного лица можно хранить должность, дополнительный телефон, Telegram и фактический адрес.</li>
+                  <li>Добавлены юридическое наименование, УНП / ИНН, КПП, ОГРН / регистрационный номер, страна и юридический адрес.</li>
+                  <li>Добавлены банк, БИК / код банка, SWIFT, корреспондентский счёт и несколько расчётных счетов клиента.</li>
+                  <li>Можно сохранять номер и дату договора, предпочитаемую валюту, условия оплаты, статус отношений и важные внутренние заметки.</li>
+                  <li>При редактировании клиента сверху показываются связанные бизнес-показатели: заказы, счета, неоплаченная сумма и оплаченная выручка.</li>
+                  <li>Поиск клиентов и глобальный поиск теперь учитывают реквизиты, сайт, сферу, теги, адреса и другие новые поля.</li>
+                  <li>Старые данные полностью совместимы: новые поля автоматически добавляются без удаления существующей информации.</li>
+                </ul>
+              </article>
+
+              <article class="card release-item">
+                <div class="release-item-head">
+                  <div><span class="release-version">Версия 14.1</span><h3>Добавлена поддержка российского рубля</h3></div>
+                  <time datetime="2026-09-09">09.09.2026</time>
+                </div>
+                <p>В настройках бизнеса теперь можно выбрать российские рубли. Выбранная валюта применяется к денежным показателям, формам, аналитике, прогнозу и калькуляторам BizPilot.</p>
+                <ul>
+                  <li>В список валют добавлен «RUB — Российский рубль».</li>
+                  <li>При выборе RUB суммы во всём интерфейсе форматируются как российские рубли со знаком ₽.</li>
+                  <li>Для понятности подписи валют в настройках дополнены полными названиями: BYN, RUB, USD и EUR.</li>
+                  <li>Выбранный RUB сохраняется в данных бизнеса и входит в обычную ZIP-резервную копию без изменения формата данных.</li>
+                </ul>
+              </article>
+
+              <article class="card release-item">
+                <div class="release-item-head">
+                  <div><span class="release-version">Версия 14.0</span><h3>Продажи под контролем и прибыльность каждого заказа</h3></div>
+                  <time datetime="2026-09-09">09.09.2026</time>
+                </div>
+                <p>BizPilot теперь помогает управлять не только текущими заказами и деньгами, но и будущей выручкой: появилась полноценная воронка продаж с обязательным следующим действием. Одновременно заказы получили себестоимость, прибыль и маржу.</p>
+                <ul>
+                  <li>Добавлен новый раздел «Продажи» с активной воронкой: Новый лид → Контакт → Предложение → Переговоры → Выиграна / Проиграна.</li>
+                  <li>У каждой сделки сохраняются сумма, контакт, источник, этап, следующий шаг, дата follow-up и комментарий.</li>
+                  <li>На странице продаж показываются активная воронка, взвешенный прогноз будущей выручки, количество активных сделок и просроченные действия.</li>
+                  <li>Просроченные follow-up автоматически попадают в «Что требует внимания» на главной и в центр уведомлений.</li>
+                  <li>BizPilot замечает сделки без следующего шага и сделки, которые слишком долго стоят на одном этапе.</li>
+                  <li>Выигранную сделку можно быстро превратить в заказ; если клиента ещё нет в базе, карточка клиента создаётся из данных сделки.</li>
+                  <li>Активную сделку нельзя сохранить без следующего шага и даты; преобразование сделки в заказ защищено от повторного создания одного и того же заказа.</li>
+                  <li>Сделки включены в глобальный поиск, заметки могут быть связаны со сделкой, а все данные продаж входят в ZIP-резервную копию.</li>
+                  <li>В заказах добавлена необязательная себестоимость. Если она указана, BizPilot считает прибыль и маржу, не выдавая неизвестную себестоимость за ноль.</li>
+                  <li>В аналитике появился рейтинг прибыльности заказов — можно увидеть, какие проекты реально зарабатывают больше.</li>
+                  <li>Автоанализ дополнен состоянием активной воронки и просроченными действиями по продажам.</li>
+                  <li>Формат резервной копии обновлён до v7 для сохранения сделок и себестоимости заказов.</li>
+                  <li>Интерфейс воронки адаптирован для мобильных экранов: колонки складываются вертикально и не растягивают страницу.</li>
+                </ul>
+              </article>
+
+              <article class="card release-item">
+                <div class="release-item-head">
+                  <div><span class="release-version">Версия 13.0</span><h3>Умные приоритеты и более честный прогноз денег</h3></div>
+                  <time datetime="2026-09-09">09.09.2026</time>
+                </div>
+                <p>BizPilot стал лучше отвечать на главный вопрос владельца бизнеса: «На что мне обратить внимание прямо сейчас?». Одновременно прогноз денежного потока стал осторожнее и точнее для просроченных счетов.</p>
+                <ul>
+                  <li>«Фокус дня» заменён на умный список приоритетов: кассовые риски, просроченные счета и заказы, ближайшие платежи, события и напоминания ранжируются по важности.</li>
+                  <li>Каждый приоритет получил понятное действие: открыть счёт, перейти к денежному потоку, заказам, календарю или блокнотам.</li>
+                  <li>Исправлена ошибка старого «Фокуса дня»: отметка выполненного пункта больше не переносится на другую задачу после изменения списка.</li>
+                  <li>Для счетов добавлена «Ожидаемая дата оплаты». Просроченная дебиторка без такой даты больше не считается поступившей сегодня и не завышает прогноз.</li>
+                  <li>В денежном потоке теперь видно, какие просроченные счета не включены в прогноз из-за отсутствия ожидаемой даты оплаты.</li>
+                  <li>Аналитика дополнена показателями риска дебиторки, запаса денег и концентрации выручки на крупнейшем клиенте.</li>
+                  <li>Автоанализ стал практичнее: выводы показывают не только факт, но и рекомендуемое следующее действие.</li>
+                  <li>Индикатор состояния на главной теперь учитывает реальные риски, а не всегда показывает «Бизнес в норме» при наличии проблем.</li>
+                  <li>Исправлены системные цвета статусов: предупреждения, риски и успешные состояния снова отображаются единообразно во всех новых разделах.</li>
+                  <li>Просроченные плановые платежи и неподтверждённые поступления теперь поднимаются в приоритеты, а не исчезают из списка внимания.</li>
+                  <li>Формат ZIP-резервной копии обновлён до v6 с сохранением нового состояния приоритетов и данных ожидаемых оплат.</li>
+                  <li>Исправлен горизонтальный выезд нижних карточек обзора на мобильных экранах: таблицы заказов и счета теперь прокручиваются внутри карточек, не растягивая всю страницу.</li>
+                  <li>Улучшены подписи и адаптивность карточек приоритетов, аналитики и строк дебиторской задолженности.</li>
+                </ul>
+              </article>
+
+              <article class="card release-item">
+                <div class="release-item-head">
+                  <div><span class="release-version">Версия 12.1</span><h3>Исправлены отступы и сетка денежного потока</h3></div>
+                  <time datetime="2026-09-09">09.09.2026</time>
+                </div>
+                <p>Привели раздел «Денежный поток» и похожие карточки к единой системе отступов, чтобы интерфейс выглядел аккуратно и не создавал пустых или «прилипших» зон.</p>
+                <ul>
+                  <li>Четыре ключевых показателя денежного потока теперь стабильно располагаются в одной строке на широком экране вместо схемы «3 + 1».</li>
+                  <li>Добавлены одинаковые внутренние отступы у прогноза, текущего остатка, дебиторки, плановых платежей и неоплаченных счетов.</li>
+                  <li>Убрана лишняя растяжка карточки «Доступно денег» по высоте графика, из-за которой появлялось большое пустое пространство.</li>
+                  <li>Добавлен нормальный вертикальный интервал перед блоком «Неоплаченные счета».</li>
+                  <li>Исправлены похожие пропущенные отступы в карточке проверки целостности данных.</li>
+                  <li>Усилена адаптивность денежных карточек: длинные суммы, подписи и строки платежей меньше рискуют ломать сетку.</li>
+                </ul>
+              </article>
+
+              <article class="card release-item">
+                <div class="release-item-head">
+                  <div><span class="release-version">Версия 12.0</span><h3>Блокноты стали быстрее, понятнее и удобнее для большой базы знаний</h3></div>
+                  <time datetime="2026-09-09">09.09.2026</time>
+                </div>
+                <p>Улучшена ежедневная работа с заметками: основные действия больше не «прыгают» по строкам, нужные записи быстрее находятся по тегам, а длинные заметки удобнее читать и редактировать без лишних панелей.</p>
+                <ul>
+                  <li>Исправлено расположение кнопки «Новая заметка»: основные действия теперь собраны в устойчивую панель и не уезжают при широком или узком окне.</li>
+                  <li>Добавлена отдельная навигация по частым тегам с количеством заметок и быстрым сбросом фильтра.</li>
+                  <li>Добавлен режим «Фокус», который скрывает навигацию и список заметок и оставляет больше места для длинной записи.</li>
+                  <li>Добавлены вкладки открытых заметок: можно держать рядом несколько записей и быстро переключаться между ними, не теряя контекст.</li>
+                  <li>BizPilot автоматически показывает похожие заметки по общим тегам, блокноту и связанным данным бизнеса.</li>
+                  <li>Теги в карточках заметок стали интерактивными: по ним можно сразу отфильтровать всю базу записей.</li>
+                  <li>Улучшены размеры текста, отступы, действия редактора и адаптивность раздела «Блокноты».</li>
+                  <li>Добавлен выход из режима фокуса по клавише Esc, чтобы быстро возвращаться к списку заметок.</li>
+                </ul>
+              </article>
+
+              <article class="card release-item">
+                <div class="release-item-head">
+                  <div><span class="release-version">Версия 11.0</span><h3>Блокноты для реальной ежедневной работы</h3></div>
+                  <time datetime="2026-09-09">09.09.2026</time>
+                </div>
+                <p>Блокноты стали полноценным рабочим инструментом: заметки теперь не только хранят текст, но помогают не забывать действия, связывать знания с бизнес-данными и безопасно возвращаться к предыдущим версиям.</p>
+                <ul>
+                  <li>Напоминания прямо в заметках с сохранением в общем центре уведомлений BizPilot.</li>
+                  <li>Связи заметок с клиентами, заказами, счетами и событиями календаря — связанный объект открывается одной кнопкой.</li>
+                  <li>Новые умные разделы «Напоминания» и «Задачи» для записей, которые требуют действий.</li>
+                  <li>История заметки хранит до 12 предыдущих состояний и позволяет восстановить нужную версию.</li>
+                  <li>Режим предпросмотра делает длинные записи и чек-листы удобнее для чтения; пункты чек-листа можно отмечать прямо в просмотре.</li>
+                  <li>Добавлены дублирование заметок и экспорт отдельной заметки в Markdown.</li>
+                  <li>Добавлены новые бизнес-шаблоны: продажный созвон, инструкция/регламент, принятое решение и маркетинговая гипотеза.</li>
+                  <li>Увеличены шрифты и улучшена читаемость списка заметок, метаданных, тегов и редактора.</li>
+                  <li>Формат резервной копии обновлён до v5: новые поля заметок, связи, напоминания и история также сохраняются в ZIP.</li>
+                </ul>
+              </article>
+
+              <article class="card release-item">
+                <div class="release-item-head">
+                  <div><span class="release-version">Версия 10.0</span><h3>Блокноты и база важных знаний</h3></div>
+                  <time datetime="2026-09-09">09.09.2026</time>
+                </div>
+                <p>В BizPilot появился отдельный раздел для заметок: теперь идеи, итоги встреч, договорённости с клиентами, инструкции и рабочие чек-листы можно хранить рядом с остальными данными бизнеса.</p>
+                <ul>
+                  <li>Новый сервис «Блокноты» с заметками, отдельными блокнотами и быстрым поиском по заголовку, тексту и тегам.</li>
+                  <li>Закрепление важных заметок, архив для завершённых материалов и корзина с ручным восстановлением или окончательным удалением.</li>
+                  <li>Автосохранение заметок прямо во время ввода, чтобы важный текст не потерялся.</li>
+                  <li>Шаблоны для предпринимателя: итоги встречи, карточка клиента, бизнес-идея и план недели.</li>
+                  <li>Теги, сортировка, счётчики и фильтры помогают быстро находить нужную информацию даже при большом количестве записей.</li>
+                  <li>Заметки и блокноты включены в глобальный поиск и ZIP-резервные копии BizPilot.</li>
+                  <li>Добавлена проверка целостности блокнотов: записи не потеряются даже при удалении связанного блокнота.</li>
+                </ul>
+              </article>
+
+              <article class="card release-item">
+                <div class="release-item-head">
+                  <div><span class="release-version">Версия 9.0</span><h3>Прогноз денег и защита от кассовых разрывов</h3></div>
+                  <time datetime="2026-09-09">09.09.2026</time>
+                </div>
+                <p>Добавлены инструменты, которые помогают предпринимателю заранее видеть нехватку денег, контролировать неоплаченные счета и планировать будущие платежи.</p>
+                <ul>
+                  <li>Новый раздел «Денежный поток» с прогнозом остатка на 30 или 90 дней.</li>
+                  <li>Отчёт по дебиторской задолженности: не просрочено, 1–30, 31–60, 61–90 и 90+ дней.</li>
+                  <li>Плановые доходы и расходы: создание, редактирование, проведение в фактические операции и уведомления о сроках.</li>
+                  <li>Поэтапные напоминания по счетам: до срока оплаты, в день оплаты и на разных стадиях просрочки.</li>
+                  <li>Быстрое копирование понятного напоминания клиенту по неоплаченному счёту.</li>
+                  <li>Пошаговый старт для нового пользователя после очистки демо, чтобы быстрее настроить сервис под свой бизнес.</li>
+                  <li>Безопасное удаление с возможностью отменить последнее удаление.</li>
+                  <li>Усилена защита локальных данных: ошибки сохранения обрабатываются, а повреждённые ZIP-копии выявляются по контрольной сумме.</li>
+                  <li>Исправлена миграция после выхода из демо: демонстрационные данные больше не могут вернуться при обновлении версии.</li>
+                  <li>Пустые финансовые графики теперь показывают понятное состояние и подсказывают, что нужно добавить.</li>
+                </ul>
+              </article>
+
+              <article class="card release-item">
+                <div class="release-item-head">
+                  <div><span class="release-version">Версия 8.0</span><h3>История версий и прозрачные обновления</h3></div>
+                  <time datetime="2026-09-09">09.09.2026</time>
+                </div>
+                <p>Добавили видимый номер версии и отдельный журнал обновлений, чтобы можно было быстро узнать текущую версию BizPilot и посмотреть, что в ней изменилось.</p>
+                <ul>
+                  <li>Кликабельная версия в нижней части боковой панели.</li>
+                  <li>Отдельная страница с историей обновлений и описанием новых возможностей.</li>
+                  <li>Номер версии синхронизирован с ZIP-резервными копиями.</li>
+                  <li>Версия и страница обновлений доступны через глобальный поиск.</li>
+                </ul>
+              </article>
+
+              <article class="card release-item">
+                <div class="release-item-head">
+                  <div><span class="release-version">Версия 7.0</span><h3>Надёжность данных и глобальный поиск</h3></div>
+                  <time datetime="2026-09-09">09.09.2026</time>
+                </div>
+                <p>Улучшена надёжность данных, связность разделов и поиск по всему сервису.</p>
+                <ul>
+                  <li>Глобальный поиск по клиентам, заказам, счетам, услугам, финансам и событиям.</li>
+                  <li>Исправлены показатели обзора после очистки демо.</li>
+                  <li>Добавлен контроль целостности и безопасное автоматическое исправление части проблем.</li>
+                  <li>Улучшена синхронизация оплаты счетов с финансами и выручкой клиентов.</li>
+                  <li>Валюта бизнеса корректно применяется в формах и калькуляторах.</li>
+                </ul>
+              </article>
+
+              <article class="card release-item">
+                <div class="release-item-head">
+                  <div><span class="release-version">Версия 6.0</span><h3>Связанные бизнес-данные</h3></div>
+                  <time datetime="2026-09-09">09.09.2026</time>
+                </div>
+                <p>Заказы, финансы, счета и календарь стали работать как единая система.</p>
+                <ul>
+                  <li>Полное редактирование заказов и финансовых операций.</li>
+                  <li>Корректные текущие даты и нумерация новых заказов и счетов после чистого старта.</li>
+                  <li>Автоматическое определение просроченных счетов.</li>
+                  <li>События календаря можно отмечать выполненными, не удаляя историю.</li>
+                  <li>Графики после очистки демо строятся по реальным операциям пользователя.</li>
+                </ul>
+              </article>
+
+              <article class="card release-item">
+                <div class="release-item-head">
+                  <div><span class="release-version">Версия 5.0</span><h3>Центр уведомлений</h3></div>
+                  <time datetime="2026-09-09">09.09.2026</time>
+                </div>
+                <p>Уведомления стали постоянными и управляемыми — важные события больше не теряются.</p>
+                <ul>
+                  <li>Колокольчик со счётчиком непрочитанных уведомлений.</li>
+                  <li>Отдельный центр уведомлений с фильтрами, прочитанными и закрытыми записями.</li>
+                  <li>Большие постоянные напоминания в правом нижнем углу.</li>
+                  <li>Прошедшие события календаря сохраняются до ручного удаления.</li>
+                </ul>
+              </article>
+
+              <article class="card release-item">
+                <div class="release-item-head">
+                  <div><span class="release-version">Версия 4.0</span><h3>Календарь и чистый старт</h3></div>
+                  <time datetime="2026-09-09">09.09.2026</time>
+                </div>
+                <ul>
+                  <li>Добавлен календарь с событиями, редактированием и напоминаниями.</li>
+                  <li>Сброс демо полностью очищает пользовательское пространство для работы с нуля.</li>
+                  <li>Исправлен полный сброс значений бизнес-калькуляторов.</li>
+                </ul>
+              </article>
+
+              <article class="card release-item">
+                <div class="release-item-head">
+                  <div><span class="release-version">Версия 3.0</span><h3>Резервные копии и управление сущностями</h3></div>
+                  <time datetime="2026-09-09">09.09.2026</time>
+                </div>
+                <ul>
+                  <li>Экспорт всех данных BizPilot в ZIP и восстановление из ZIP.</li>
+                  <li>Редактирование и удаление клиентов, счетов и услуг.</li>
+                  <li>Расширенная страница бизнес-подсчётов с набором калькуляторов.</li>
+                </ul>
+              </article>
+
+              <article class="card release-item">
+                <div class="release-item-head">
+                  <div><span class="release-version">Версия 2.0</span><h3>Профиль, реквизиты и подсчёты</h3></div>
+                  <time datetime="2026-09-09">09.09.2026</time>
+                </div>
+                <ul>
+                  <li>Настройки профиля владельца и реквизитов предпринимателя.</li>
+                  <li>Сохранение данных в браузере и использование реквизитов при печати счетов.</li>
+                  <li>Первые бизнес-калькуляторы: маржа, налог, безубыточность и ставка часа.</li>
+                </ul>
+              </article>
+
+              <article class="card release-item">
+                <div class="release-item-head">
+                  <div><span class="release-version">Версия 1.0</span><h3>Первая версия BizPilot</h3></div>
+                  <time datetime="2026-09-09">09.09.2026</time>
+                </div>
+                <ul>
+                  <li>Обзор бизнеса, заказы, клиенты, финансы, счета и услуги.</li>
+                  <li>Аналитика, настройки, светлая и тёмная темы.</li>
+                  <li>Готовая статическая версия для размещения в файловом менеджере uCoz без установки серверной части.</li>
+                </ul>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="view" data-view-panel="settings">
+          <div class="settings-grid">
+            <article class="card settings-card">
+              <div class="card-head"><div><span class="eyebrow">Компания</span><h3>Профиль бизнеса</h3></div></div>
+              <form id="businessForm" class="form-grid">
+                <label><span>Название бизнеса</span><input name="businessName"></label>
+                <label><span>Сфера</span><input name="industry"></label>
+                <label><span>Валюта</span><select name="currency"><option value="BYN">BYN — Белорусский рубль</option><option value="RUB">RUB — Российский рубль</option><option value="USD">USD — Доллар США</option><option value="EUR">EUR — Евро</option></select></label>
+                <label><span>Email</span><input name="email" type="email"></label>
+                <label class="span-2"><span>Описание</span><textarea name="description" rows="4"></textarea></label>
+                <div class="span-2 form-actions"><span class="save-status" id="saveStatus"></span><button class="btn btn-primary" type="submit">Сохранить настройки</button></div>
+              </form>
+            </article>
+            <article class="card settings-card">
+              <div class="card-head"><div><span class="eyebrow">Интерфейс</span><h3>Внешний вид</h3></div></div>
+              <div class="settings-options">
+                <button class="setting-row" id="themeSetting"><span><strong>Тема интерфейса</strong><small id="themeSettingHint">Светлая / тёмная / авто по восходу и закату</small></span><span class="switch" aria-hidden="true"><i></i></span></button>
+                <button class="setting-row" id="densitySetting"><span><strong>Компактный режим</strong><small>Больше информации на экране</small></span><span class="switch" aria-hidden="true"><i></i></span></button>
+              </div>
+            </article>
+          </div>
+
+          <div class="settings-grid profile-settings-grid settings-profile-row">
+            <article class="card settings-card">
+              <div class="card-head"><div><span class="eyebrow">Профиль владельца</span><h3>Контактная информация</h3></div></div>
+              <form id="profileForm" class="form-grid">
+                <label><span>Имя и фамилия</span><input name="fullName" autocomplete="name" placeholder="Имя и фамилия"></label>
+                <label><span>Роль</span><input name="role" placeholder="Владелец / директор"></label>
+                <label><span>Email</span><input name="email" type="email" autocomplete="email" placeholder="mail@example.com"></label>
+                <label><span>Телефон</span><input name="phone" autocomplete="tel" placeholder="+375 29 000-00-00"></label>
+                <label><span>Город</span><input name="city" autocomplete="address-level2" placeholder="Минск"></label>
+                <label><span>Сайт</span><input name="website" type="url" placeholder="https://example.com"></label>
+                <label class="span-2"><span>Заметка о себе</span><textarea name="bio" rows="3" placeholder="Короткая заметка для профиля"></textarea></label>
+                <div class="span-2 form-actions"><span class="save-status" id="profileSaveStatus"></span><button class="btn btn-primary" type="submit">Сохранить профиль</button></div>
+              </form>
+            </article>
+
+            <article class="card settings-card">
+              <div class="card-head"><div><span class="eyebrow">Реквизиты</span><h3>Данные предпринимателя</h3></div></div>
+              <form id="requisitesForm" class="form-grid single-column">
+                <label><span>Юридическое имя / ИП</span><input name="legalName" placeholder="ИП Иванов И.И."></label>
+                <label><span>УНП</span><input name="unp" inputmode="numeric" placeholder="000000000"></label>
+                <label><span>Юридический адрес</span><input name="legalAddress" placeholder="Адрес"></label>
+                <label><span>Банк</span><input name="bankName" list="belarusBankList" autocomplete="off" placeholder="Название банка"></label>
+                <label><span>IBAN / расчётный счёт</span><input name="iban" autocomplete="off" placeholder="BY00 0000 0000 0000 0000 0000 0000"><small class="field-help">Для белорусского IBAN BizPilot попробует определить банк и BIC по банковскому коду в начале счёта.</small></label>
+                <label><span>BIC / SWIFT</span><input name="bic" placeholder="BIC / SWIFT"></label>
+                <div class="form-actions"><span class="save-status" id="requisitesSaveStatus"></span><button class="btn btn-primary" type="submit">Сохранить реквизиты</button></div>
+              </form>
+              <div class="privacy-note"><strong>Локальное хранение</strong><p>Эти данные сохраняются только в текущем браузере и входят в ZIP-резервную копию BizPilot.</p></div>
+            </article>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <datalist id="belarusBankList"></datalist>
+
+  <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-head"><div><span class="eyebrow">BizPilot</span><h2 id="modalTitle">Создать</h2></div><button class="icon-btn" id="modalClose" aria-label="Закрыть">×</button></div>
+      <form id="dynamicForm" class="modal-body"></form>
+    </div>
+  </div>
+
+  <div class="command-palette" id="commandPalette" aria-hidden="true">
+    <div class="command-box">
+      <div class="command-search"><span>⌕</span><input id="commandInput" placeholder="Клиент, заказ, счёт, услуга, событие или действие…"></div>
+      <div class="command-list" id="commandList"></div>
+      <div class="command-hint"><span>↑↓ выбрать</span><span>Enter открыть</span><span>Esc закрыть</span></div>
+    </div>
+  </div>
+
+  <div class="reminder-stack" id="reminderStack" aria-live="assertive" aria-atomic="false"></div>
+  <div class="toast-stack" id="toastStack" aria-live="polite"></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
