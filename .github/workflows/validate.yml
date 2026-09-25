@@ -1,0 +1,100 @@
+name: Validate
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "index.html"
+      - "css/**"
+      - "js/**"
+      - ".github/workflows/validate.yml"
+  pull_request:
+    paths:
+      - "index.html"
+      - "css/**"
+      - "js/**"
+      - ".github/workflows/validate.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  static-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "24"
+
+      - name: JavaScript syntax
+        run: node --check js/app.js
+
+      - name: Verify local HTML assets
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+          from urllib.parse import urlsplit
+
+          root = Path(".").resolve()
+          html = Path("index.html").read_text(encoding="utf-8")
+
+          class LocalAssetParser(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.refs = set()
+
+              def handle_starttag(self, tag, attrs):
+                  attrs = dict(attrs)
+                  for key in ("src", "href"):
+                      value = attrs.get(key)
+                      if not value:
+                          continue
+                      if value.startswith(("#", "data:", "mailto:", "tel:", "javascript:")):
+                          continue
+                      parts = urlsplit(value)
+                      if parts.scheme or parts.netloc:
+                          continue
+                      path = parts.path.lstrip("/")
+                      if path:
+                          self.refs.add(path)
+
+          parser = LocalAssetParser()
+          parser.feed(html)
+          missing = [ref for ref in sorted(parser.refs) if not (root / ref).exists()]
+          if missing:
+              raise SystemExit("Missing local assets referenced by index.html: " + ", ".join(missing))
+          print("Local HTML asset references are valid:", ", ".join(sorted(parser.refs)))
+          PY
+
+      - name: Static server smoke
+        shell: bash
+        run: |
+          python3 -m http.server 8000 > /tmp/bizpilot-http.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+
+          for attempt in {1..20}; do
+            if curl -fsS http://127.0.0.1:8000/ >/dev/null; then
+              break
+            fi
+            sleep 0.25
+          done
+
+          curl -fsS http://127.0.0.1:8000/ >/dev/null
+          curl -fsS http://127.0.0.1:8000/css/styles.css >/dev/null
+          curl -fsS http://127.0.0.1:8000/js/app.js >/dev/null
+
+      - name: Diff hygiene
+        run: git diff --check

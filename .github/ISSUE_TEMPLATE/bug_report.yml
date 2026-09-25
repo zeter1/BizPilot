@@ -1,0 +1,83 @@
+name: Bug report
+description: Сообщить о воспроизводимой проблеме в BizPilot
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Спасибо за отчёт. Не прикладывайте реальные клиентские, финансовые или другие конфиденциальные данные.
+
+  - type: input
+    id: revision
+    attributes:
+      label: Версия / revision
+      description: Версия BizPilot или commit SHA, если известен.
+      placeholder: "17.0 / commit SHA"
+    validations:
+      required: true
+
+  - type: input
+    id: browser
+    attributes:
+      label: Браузер и версия
+      placeholder: "Chrome 140, Firefox 142..."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Область
+      options:
+        - Интерфейс / навигация
+        - Клиенты / заказы / сделки
+        - Финансы / счета / денежный поток
+        - Календарь / уведомления / заметки
+        - localStorage / сохранение состояния
+        - Demo-mode
+        - ZIP export / import / restore
+        - Другое
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Шаги воспроизведения
+      description: Короткая последовательность действий от чистого/понятного состояния.
+      placeholder: |
+        1. Открыть ...
+        2. Нажать ...
+        3. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Фактический результат
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Ожидаемый результат
+    validations:
+      required: true
+
+  - type: textarea
+    id: console
+    attributes:
+      label: Console / диагностика
+      description: Небольшой релевантный фрагмент DevTools Console без личных данных и секретов.
+      render: text
+
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Безопасность данных
+      options:
+        - label: Я удалил(а) из отчёта реальные клиентские, финансовые и другие конфиденциальные данные.
+          required: true
