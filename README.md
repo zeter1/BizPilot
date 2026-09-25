@@ -71,9 +71,11 @@ BizPilot/
 ├── css/
 │   └── styles.css          # стили, адаптивность и темы
 ├── js/
-│   └── app.js              # состояние, бизнес-логика, хранение и UI-поведение
+│   ├── cashflow.js         # тестируемый cash-flow / дебиторка forecasting engine
+│   └── app.js              # состояние, бизнес-логика и UI orchestration
 └── scripts/
-    └── browser-smoke.sh    # headless Chrome startup verification
+    ├── browser-smoke.sh    # headless Chrome startup verification
+    └── test-cashflow.mjs   # regression tests денежного прогноза
 ```
 
 Приложение намеренно собрано как статический frontend без сборщика и внешнего package manager.
@@ -88,7 +90,8 @@ BizPilot/
 
 Репозиторий содержит GitHub Actions workflow [`.github/workflows/validate.yml`](.github/workflows/validate.yml). На изменениях приложения он автоматически проверяет:
 
-- синтаксис `js/app.js` через `node --check`;
+- синтаксис browser JavaScript;
+- regression tests для cash-flow forecast, cash-gap detection и aging дебиторки;
 - что локальные CSS/JS-ресурсы, на которые ссылается `index.html`, существуют;
 - что локальные CSS/JS-ресурсы, на которые ссылается `index.html`, существуют;
 - настоящий headless Chrome boot через локальный HTTP-сервер до маркера `data-bizpilot-boot="ready"`;
@@ -99,9 +102,11 @@ BizPilot/
 
 ```bash
 node --check js/app.js
+node --check js/cashflow.js
+node scripts/test-cashflow.mjs
 ```
 
-Автоматический CI теперь доказывает, что приложение реально исполняет startup logic в headless Chrome и доходит до готового dashboard. Полный пользовательский E2E — создание/редактирование сущностей, persistence после reload, demo-mode и ZIP export/import — пока **NOT VERIFIED** автоматическим CI и остаётся отдельным уровнем проверки.
+Автоматический CI теперь доказывает, что cash-flow regression suite проходит, приложение реально исполняет startup logic в headless Chrome и доходит до готового dashboard. Boot diagnostics сохраняют stage/error в `data-bizpilot-boot-*`, поэтому ранний runtime failure не маскируется общей ошибкой загрузки. Полный пользовательский E2E — создание/редактирование сущностей, persistence после reload, demo-mode и ZIP export/import — пока **NOT VERIFIED** автоматическим CI и остаётся отдельным уровнем проверки.
 
 ## Ограничения
 
