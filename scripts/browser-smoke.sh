@@ -36,6 +36,8 @@ if ! grep -q 'data-bizpilot-boot="ready"' "$DOM_DUMP"; then
   cat "$HTTP_LOG"
   echo "--- Chrome log ---"
   cat "$CHROME_LOG"
+  echo "--- DOM boot state ---"
+  grep -m1 -o '<html[^>]*>' "$DOM_DUMP" || true
   echo "--- DOM tail ---"
   tail -n 100 "$DOM_DUMP"
   exit 1

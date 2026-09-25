@@ -1,6 +1,16 @@
 (() => {
   'use strict';
 
+  const markBootStage = stage => { document.documentElement.dataset.bizpilotBootStage = stage; };
+  const markBootError = value => {
+    const text = String(value?.message || value || 'unknown error').replace(/[\r\n]+/g, ' ').slice(0, 180);
+    document.documentElement.dataset.bizpilotBoot = 'error';
+    document.documentElement.dataset.bizpilotBootError = text;
+  };
+  window.addEventListener('error', event => markBootError(event.error || event.message));
+  window.addEventListener('unhandledrejection', event => markBootError(event.reason));
+  markBootStage('script');
+
   const STORAGE_KEY = 'bizpilot-demo-v1';
   const PREFS_KEY = 'bizpilot-prefs-v1';
   const CALC_KEY = 'bizpilot-calculators-v1';
@@ -2908,13 +2918,21 @@
 
   function toggleTheme(){ const order=['light','dark','auto']; prefs.theme=order[(order.indexOf(prefs.theme)+1)%order.length]; savePrefs(); applyPrefs(); renderChart(Number($('#chartPeriod').value||6)); if(prefs.theme==='auto')requestAutoThemeLocation(); else toast(prefs.theme==='dark'?'Тёмная тема включена':'Светлая тема включена'); }
 
+  markBootStage('banks');
   initBelarusBankDatalist();
+  markBootStage('prefs');
   applyPrefs();
+  markBootStage('theme-watcher');
   startAutoThemeWatcher();
+  markBootStage('calculator-state');
   restoreCalculatorInputs();
+  markBootStage('ui-state');
   restoreUiState();
+  markBootStage('bind');
   bind();
+  markBootStage('render');
   renderAll();
+  markBootStage('notifications');
   startNotificationWatcher();
   setInterval(()=>{ if(activeView==='orders' && data.orders.some(o=>o.timerStartedAt)) renderOrders(); },60000);
   document.addEventListener('visibilitychange', ()=>{ if(!document.hidden){ checkEventNotifications(); if(prefs.theme==='auto')applyPrefs(); } });
@@ -2925,5 +2943,6 @@
   if (safeSessionGet('bizpilot-demo-started-v2')) { safeSessionRemove('bizpilot-demo-started-v2'); toast('Учебный демо-режим запущен. Рабочие данные сохранены отдельно.'); }
   if (safeSessionGet('bizpilot-demo-ended-v2')) { safeSessionRemove('bizpilot-demo-ended-v2'); toast('Демо завершено. Рабочая область восстановлена.'); }
   if (safeSessionGet('bizpilot-import-notice-v1')) { safeSessionRemove('bizpilot-import-notice-v1'); toast('Все данные восстановлены из ZIP'); }
+  markBootStage('ready');
   document.documentElement.dataset.bizpilotBoot='ready';
 })();
