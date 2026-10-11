@@ -1,10 +1,14 @@
-# BizPilot
-
 **Язык / Language:** [Русский](README.md) · **English**
+
+# BizPilot
 
 BizPilot is a browser workspace for small businesses: clients, orders, sales, invoices, finances, cash flow, services, notes, calendar and analytics.
 
 ## Get started
+
+**[Launch online — no installation](https://dkl.do.am/portfolio/bizpilot/index.html)** in a modern browser. The online version does not require downloading the source.
+
+To run a local copy:
 
 1. Download https://github.com/zeter1/BizPilot/archive/refs/heads/main.zip and extract the whole folder.
 2. Open `index.html` in a modern browser. A backend, Node.js and a server database are not required for normal use.
@@ -13,7 +17,7 @@ BizPilot is a browser workspace for small businesses: clients, orders, sales, in
 
 ## Data and backups
 
-Working data is stored in the current browser profile using `localStorage`. There is no server synchronization or shared multi-user workspace. Clearing storage without a backup can cause data loss. Exported backups may contain client, financial and banking information; remove private details before sharing them.
+Working data is stored in the current browser profile using `localStorage`. There is no server synchronization or shared multi-user workspace. The online version and a local copy use separate storage: export a ZIP backup from the data section, then import it into the version you want to use. Launching online does not add server synchronization. Clearing storage without a backup can cause data loss. Exported backups may contain client, financial and banking information; remove private details before sharing them.
 
 ## For developers
 
@@ -38,8 +42,6 @@ See the [project structure](README.md#структура-проекта), [CI an
 Report a bug at https://github.com/zeter1/BizPilot/issues/new?template=bug_report.yml. Include the browser/version, application section, steps, expected result and actual result. Mention whether demo mode, local storage or ZIP restore is involved. Back up important data before clearing storage. Use [SECURITY.md](SECURITY.md) for vulnerability disclosure.
 
 ## Developer contacts
-
-**Язык / Language:** [Русский](README.md#контакты-для-связи-с-разработчиком) · **English**
 
 - [zeter11@gmail.com](mailto:zeter11@gmail.com)
 - [https://t.me/zeter1](https://t.me/zeter1)
