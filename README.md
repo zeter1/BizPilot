@@ -128,3 +128,9 @@ node scripts/test-cashflow.mjs
 Для ошибок используйте структурированную форму: **[Bug report](https://github.com/zeter1/BizPilot/issues/new?template=bug_report.yml)**.
 
 Перед очисткой browser storage сначала сохраните ZIP-backup, если рабочие данные важны.
+
+## Контакты для связи с разработчиком
+
+- [zeter11@gmail.com](mailto:zeter11@gmail.com)
+- [https://t.me/zeter1](https://t.me/zeter1)
+- [https://www.linkedin.com/in/zeter/](https://www.linkedin.com/in/zeter/)
