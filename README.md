@@ -1,5 +1,7 @@
 # BizPilot
 
+**Язык / Language:** **Русский** · [English](README_EN.md)
+
 [![Validate](https://github.com/zeter1/BizPilot/actions/workflows/validate.yml/badge.svg)](https://github.com/zeter1/BizPilot/actions/workflows/validate.yml)
 
 **BizPilot** — браузерное рабочее пространство для малого бизнеса. Проект объединяет заказы, клиентов, продажи и сделки, счета, финансы, денежный поток, услуги, заметки, календарь, уведомления и аналитику в одном интерфейсе.
@@ -143,6 +145,16 @@ node scripts/test-cashflow.mjs
 
 ## Контакты для связи с разработчиком
 
+**Язык / Language:** **Русский** · [English](README_EN.md#developer-contacts)
+
 - [zeter11@gmail.com](mailto:zeter11@gmail.com)
 - [https://t.me/zeter1](https://t.me/zeter1)
 - [https://www.linkedin.com/in/zeter/](https://www.linkedin.com/in/zeter/)
+- [https://www.facebook.com/zeter1](https://www.facebook.com/zeter1)
+- [https://vk.ru/zeter1](https://vk.ru/zeter1)
+- [https://www.instagram.com/zeter1992/](https://www.instagram.com/zeter1992/)
+- [https://tenchat.ru/zeter](https://tenchat.ru/zeter)
+- [https://x.com/zeter1](https://x.com/zeter1)
+- [https://www.threads.com/@zeter1992](https://www.threads.com/@zeter1992)
+- [https://ok.ru/zeter1](https://ok.ru/zeter1)
+- [https://t.me/zeterchat](https://t.me/zeterchat) — Telegram-группа: обо мне, проекты и чат
