@@ -39,7 +39,10 @@ jobs:
           node-version: "24"
 
       - name: JavaScript syntax
-        run: node --check js/app.js
+        run: |
+          node --check js/app.js
+          node --check js/cashflow.js
+          node --check scripts/browser-interaction-smoke.js
 
       - name: Verify local HTML assets
         shell: bash
