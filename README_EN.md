@@ -6,7 +6,7 @@ BizPilot is a browser workspace for small businesses: clients, orders, sales, in
 
 ## Get started
 
-**[Launch online — no installation](https://dkl.do.am/portfolio/bizpilot/index.html)** in a modern browser. The online version does not require downloading the source.
+**[Launch online — no installation](https://dkoles.com/portfolio/bizpilot/index.html)** in a modern browser. The online version does not require downloading the source.
 
 To run a local copy:
 

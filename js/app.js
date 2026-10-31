@@ -106,7 +106,7 @@
       email: 'zeter11@gmail.com',
       phone: '+375445935190',
       city: 'Минск',
-      website: 'https://dkl.do.am',
+      website: 'https://dkoles.com',
       bio: 'Веб-разработчик и создатель цифровых продуктов для малого бизнеса.',
       legalName: 'ИП Колесниченко Д.',
       unp: '',
